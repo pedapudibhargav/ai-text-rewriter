@@ -41,7 +41,7 @@ if (TeamMoodTrackerDOM) {
   root = ReactDOM.createRoot(TeamMoodTrackerDOM);
   root.render(
     <React.StrictMode>
-      <Container maxWidth="md">
+      <Container maxWidth="lg">
         <TeamMoodTracker/>
       </Container>
     </React.StrictMode>

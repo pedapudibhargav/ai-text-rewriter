@@ -1,0 +1,99 @@
+.card-1 {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
+}
+
+.card-1:hover {
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+}
+
+.card-2,
+.mood-card-paper {
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+
+.card-3,
+.mood-card-paper:hover {
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+}
+
+.card-4 {
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+}
+
+.card-5 {
+    box-shadow: 0 19px 38px rgba(0, 0, 0, 0.30), 0 15px 12px rgba(0, 0, 0, 0.22);
+}
+
+.mood-card-paper {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    height: 400px;
+    width: 80%;
+    padding: 10%;
+}
+
+.mood-card-paper:hover {
+    cursor: pointer;
+}
+
+.mood-card-img {
+    max-width: 70%;
+    max-height: 45%;
+    margin: auto;
+}
+
+.modd-card-heading {
+    opacity: 0.9;
+    color: white;
+    font-size: 2.5rem;
+    text-transform: capitalize;
+    font-family: 'Kaushan Script', sans-serif;
+}
+
+.modd-emojis {
+    font-size: 2.25rem;
+}
+
+.mood-card-subcategories {
+    color: white;
+    opacity: 0.75;
+    font-weight: 600;
+    font-size: 1rem;
+    font-family: sans-serif;
+    text-transform: capitalize;
+}
+
+/* Begin test */
+.MuiPaper-root.beging-test-paper {
+    height: 300px;
+    padding: 10%;
+    border-radius: 10px;
+    text-align: center;
+    background: linear-gradient(to bottom, #4398ff , #8cbdfc);
+}
+
+.tyrnow-subhead {
+    color: white;
+    margin-bottom: 5px;
+}
+
+.tyrnow-heading {
+    color: white;
+    font-size: 1.75rem;
+    margin-top: 5px;
+}
+
+.MuiTextField-root.tyrnow-team-name {
+    background-color: white;
+    margin-top: 40px;
+    opacity: 0.7;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    width: 90%;
+}
+
+.begin-test-container {
+    height: 80vh;
+}
