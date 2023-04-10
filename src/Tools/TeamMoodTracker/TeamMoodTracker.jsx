@@ -5,24 +5,10 @@ import {
 } from "react-router-dom";
 import './TeamMoodTracker.css';
 import { emotions } from './Emotions.js';
+import BeginMoodCheckIn from './BeginMoodCheckIn';
 
 
-// Begin mood check in
-function BeginMoodCheckIn(props) {
-  const uniqueNumber = Date.now().toString(36) + Math.random().toString(36).substring(2, 7);
-  return (
-    <Grid className="begin-test-container" container direction="row" justifyContent="center" alignItems="center">
-      <Grid item xs={4}>
-        <Paper className='beging-test-paper'>
-          <p className="tyrnow-subhead">How is your team feeling</p>
-          <h2 className="tyrnow-heading">Team Mood Check-Ins</h2>
-          <TextField className="tyrnow-team-name" label="Enter your team name" variant="outlined" />
-          <Button variant="contained" size="large" component={Link} to={`./${uniqueNumber}`} >Try it for Free</Button>
-        </Paper>
-      </Grid>
-    </Grid>
-  )
-}
+
 
 
 // Returns mood card based on emotion
@@ -38,7 +24,7 @@ function MoodCard(props) {
   return (
     <Grid item xs={3}>
       <Paper className='mood-card-paper' style={getBackgroundStyle(props.emotion)}>
-        <h1 className='modd-card-heading'>{props.emotion.overall}</h1>
+        <h2 className='modd-card-heading'>{props.emotion.overall}</h2>
         <img className='mood-card-img' src={backgroundImage} alt="dummy" />
         <p className='mood-card-subcategories'>
           <span className='modd-emojis'>{props.emotion.emojis.join(' ')}</span>
