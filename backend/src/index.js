@@ -44,11 +44,13 @@ app.get('/', (req, res) => {
 });
 
 
+
 // POST API to capture game data with security measures
 app.post('/captureGame/:gameId', (req, res) => {
     const gameId = req.params.gameId;
     const userSelection = req.body;
 
+    console.log(`----------${JSON.stringify(req.body)}----------`);
     // Check if game exists
     if (!gameId || !teamMoodData["moodtest"][`T-${gameId}`]) {
         return res.status(404).json({ error: `Game not found: T-${gameId}` });
@@ -59,27 +61,44 @@ app.post('/captureGame/:gameId', (req, res) => {
         return res.status(400).json({ error: "Invalid input data" });
     }
 
-    // Check if player is a valid player in the game
-    if (!gamesData[gameId].players.includes("U-bhargav")) {
-        return res.status(403).json({ error: "You are not a valid player in this game" });
-    }
-
     // Capture player data
-    gamesData[`T-${gameId}`].results[`U-${userSelection.user}`] = userSelection;
+    let GameFound = teamMoodData["moodtest"][`T-${gameId}`];
+    console.log(`----------${JSON.stringify(GameFound)}----------   `);
+
+    teamMoodData["moodtest"][`T-${gameId}`]["results"][`U-${userSelection.user}`] = userSelection;
 
     // Return success response
     return res.status(200).json({ message: "Player data captured successfully" });
 });
 
 
-// POST API to capture game data with security measures
-app.put('/captureGame/:gameId', (req, res) => {
+// Get API to capture new game
+app.get('/api/v1/newgame', (req, res) => {
+    console.log('Entering new game API');
+    const gameId = req.query.gameId;
     teamMoodData["moodtest"][`T-${gameId}`] = {
         "organizers": [],
         "results": {}
     };
-    return res.status(200).json({ message: "Game created!" });
+    return res.status(200).json({ message: "Game created!", teamMoodData: teamMoodData });
 });
+
+// Get API to get game results
+app.get('/api/v1/allgames', (req, res) => {
+    console.log('Entering all games API');
+    return res.status(200).json(teamMoodData);
+});
+
+// Get API to get game results
+app.get('/api/v1/moodtest/results', (req, res) => {
+    console.log('Entering mood test results');
+    const gameId = req.params.gameId;
+    if(!teamMoodData["moodtest"][`T-${gameId}`])
+        return res.status(404).json({ error: `Game not found: T-${gameId}` });
+    const results = teamMoodData["moodtest"][`T-${gameId}`];
+    return res.status(200).json(results);
+});
+
 
 
 // starting the server
