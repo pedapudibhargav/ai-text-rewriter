@@ -1,43 +1,72 @@
 import React, { useState, useEffect } from 'react'
-import { Grid, Paper, TextField, Button } from "@mui/material";
+import { TextField, Button, Card, CardContent, CardActions, Alert } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import './NewUser.css';
 
 export default function NewUser() {
     const [name, setName] = useState("");
+    const [touched, setTouched] = useState(false);
+    const [isValid, setIsValid] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
-      const storedName = localStorage.getItem("name");
-      if (storedName) {
-        setName(storedName);
-      }
+        const storedName = localStorage.getItem("username");
+        if (storedName) {
+            setName(storedName);
+        }
     }, []);
-  
+
     const handleSubmit = (e) => {
-      e.preventDefault();
-      localStorage.setItem("name", name);
-      console.log('user name saved:', name);
+        e.preventDefault();
+        localStorage.setItem("username", name);
+        console.log('usename saved 2:', name);
+        navigate(`/moodchecker`);
     };
+
+    const handleInputChange = (e) => {
+        const inputValue = e.target.value;
+        setName(inputValue)
+        setTouched(true);
+        setIsValid(validateUsername(inputValue));
+    }
+
+    // Validate user name
+    function validateUsername(username) {
+        const regex = /^[a-zA-Z0-9_]{3,20}$/;
+        return regex.test(username);
+    }
 
     return (
         <>
-            <Grid className="mood-test-container" container direction="row" justifyContent="center" alignItems="center" spacing={2}>
-                <Paper>
-                    <h2>Let's get to know each other-{name}</h2>
+            <Card className='new-user-card'>
+                <CardContent>
+                    <h2>Let's get to know each other</h2>
                     <p>
                         Hey, there! What's your name so we can make your visit more enjoyable?
                     </p>
+                    {touched && !isValid && (
+                        <Alert className="userinput-alert" severity="warning" >Must contain only letters, numbers, or underscores
+                            Must be between 3 and 20 characters long</Alert>
+                    )}
                     <form onSubmit={handleSubmit}>
                         <TextField
+                            className='new-user-name-input'
                             label="Enter your name"
                             variant="outlined"
                             value={name}
-                            onChange={(e) => setName(e.target.value)}
+                            onChange={(e) => handleInputChange(e)}
                         />
-                        <Button type="submit" variant="contained" color="primary">
+                        {/* <Button type="submit" variant="contained" color="primary">
                             Save
-                        </Button>
+                        </Button> */}
                     </form>
-                </Paper>
-            </Grid>
+                </CardContent>
+                <CardActions>
+                    {touched && isValid && (
+                        <Button size="medium" className='btn-create-user' variant="contained" color="primary" onClick={handleSubmit}>Let's Go</Button>
+                    )}                    
+                </CardActions>
+            </Card>
         </>
     )
 }
