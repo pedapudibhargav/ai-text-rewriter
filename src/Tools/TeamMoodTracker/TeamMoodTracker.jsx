@@ -9,6 +9,10 @@ import MoodTestResults from './MoodTestResults';
 import BeginMoodCheckIn from './BeginMoodCheckIn';
 import NewUser from './NewUser';
 import ResponsiveAppBar from './ResponsiveAppBar';
+import happyImage from './images/moods/happy.png';
+import okImage from './images/moods/ok.png';
+import nookImage from './images/moods/nook.png';
+import angryImage from './images/moods/angry.png';
 
 const BE_HOST = process.env.REACT_APP_BACKEND_HOST;
 
@@ -21,7 +25,7 @@ function MoodCard(props) {
       background: `linear-gradient(to bottom, ${primaryBgColor} , ${secondaryBgColor})`,
     };
   }
-  const backgroundImage = props.emotion.primaryImages[0] ? props.emotion.primaryImages[0] : '';
+  // const backgroundImage = props.emotion.primaryImages[0] ? props.emotion.primaryImages[0] : '';
 
   // handle card click
   const handleCardClick = () => {
@@ -38,12 +42,26 @@ function MoodCard(props) {
       'mood-card-paper mood-card-paper-active' : 'mood-card-paper'
   }
 
+  const getCardImageSrc = (emotionOverall) => {
+    switch (emotionOverall) {
+      case 'great':
+        return happyImage;
+      case 'ok':
+        return okImage;
+      case 'not ok':
+        return nookImage;
+      case 'bad':
+        return angryImage;
+      default:
+        return happyImage;
+    }
+  }
 
   return (
     <Grid item xs={3}>
       <Paper className={cardSelectedClass()} style={getBackgroundStyle(props.emotion)} onClick={() => handleCardClick()}>
         <h2 className='modd-card-heading'>{props.emotion.overall}</h2>
-        <img className='mood-card-img' src={backgroundImage} alt="dummy" />
+        <img className='mood-card-img' src={getCardImageSrc(props.emotion.overall)} alt={`${props.emotion.overall} image`} />
         <p className='mood-card-subcategories'>
           <span className='modd-emojis'>{props.emotion.emojis.join(' ')}</span>
           {props.emotion.subCategories.join(', ')}
