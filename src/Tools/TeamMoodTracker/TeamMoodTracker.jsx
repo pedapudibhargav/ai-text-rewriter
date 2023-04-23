@@ -1,5 +1,5 @@
-import React from 'react'
-import { Grid, Paper, Button } from "@mui/material";
+import React, { useState } from 'react'
+import { Grid, Paper, Button, Container } from "@mui/material";
 import {
   useParams, Route, Routes, BrowserRouter, useNavigate
 } from "react-router-dom";
@@ -8,6 +8,7 @@ import { emotions } from './Emotions.js';
 import MoodTestResults from './MoodTestResults';
 import BeginMoodCheckIn from './BeginMoodCheckIn';
 import NewUser from './NewUser';
+import ResponsiveAppBar from './ResponsiveAppBar';
 
 const BE_HOST = process.env.REACT_APP_BACKEND_HOST;
 
@@ -22,14 +23,25 @@ function MoodCard(props) {
   }
   const backgroundImage = props.emotion.primaryImages[0] ? props.emotion.primaryImages[0] : '';
 
+  // handle card click
   const handleCardClick = () => {
     console.log('MoodCard - card clicked');
     props.cardClickHandler();
   }
 
+
+  // return class name for selected card
+  const cardSelectedClass = () => {
+    const userSelectedEmotion = props.selectedEmotion && props.selectedEmotion.overall ? props.selectedEmotion.overall : '';
+    const emotionOfThisCard = props.emotion.overall;
+    return (userSelectedEmotion === emotionOfThisCard) ?
+      'mood-card-paper mood-card-paper-active' : 'mood-card-paper'
+  }
+
+
   return (
     <Grid item xs={3}>
-      <Paper className='mood-card-paper' style={getBackgroundStyle(props.emotion)} onClick={() =>  handleCardClick()}>
+      <Paper className={cardSelectedClass()} style={getBackgroundStyle(props.emotion)} onClick={() => handleCardClick()}>
         <h2 className='modd-card-heading'>{props.emotion.overall}</h2>
         <img className='mood-card-img' src={backgroundImage} alt="dummy" />
         <p className='mood-card-subcategories'>
@@ -44,6 +56,9 @@ function MoodCard(props) {
 
 // Mood test component
 function MoodTest() {
+  const [testname, setTestname] = React.useState(localStorage.getItem('testName'));
+  const [username, setUsername] = useState(localStorage.getItem('username'));
+  const [selectedEmotion, setSelectedEmotion] = React.useState(null);
   let { testId } = useParams();
   const navigate = useNavigate();
 
@@ -54,7 +69,8 @@ function MoodTest() {
 
 
   const handleUserCardSelection = async (emotion) => {
-    console.log('User card selected');
+    console.log('User card selected', testId);
+    setSelectedEmotion(emotion);
     const BE_API = `${BE_HOST}/captureGame/${testId}`;
 
     // validate emotion data and set form data
@@ -63,7 +79,7 @@ function MoodTest() {
       return;
     }
     const formData = {
-      "user": "AnonimusA",
+      "user": username,
       "mood": emotion.overall,
       "feeling": emotion.subCategories.join(',')
     };
@@ -74,7 +90,7 @@ function MoodTest() {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',
-      },
+        },
         body: JSON.stringify(formData)
         ,
       });
@@ -87,12 +103,28 @@ function MoodTest() {
 
   return (
     <>
-      <p>testid:{testId}</p>
-      <Grid className="mood-test-container" container direction="row" justifyContent="center" alignItems="center" spacing={2}>
-        {emotions.map(emotion =>
-          <MoodCard key={emotion.zone} emotion={emotion} cardClickHandler={() => handleUserCardSelection(emotion)} />
-        )}
-        <Button variant="contained" onClick={handleViewResultsClick}>View Results</Button>
+      <Grid container className="mood-test-grid" spacing={2} direction="column" justifyContent="center" alignItems="center">
+        <Grid item xs={12}>
+          <header className='test-header'>
+            {
+              (testname && testname !== '') ?
+                <h1>{testname}</h1> :
+                <h1>How are you feeling today?</h1>
+            }
+          </header>
+        </Grid>
+        <Grid item xs={12}>
+          <Grid className="mood-test-container" container direction="row" spacing={2}>
+            {emotions.map(emotion =>
+              <MoodCard key={emotion.zone} selectedEmotion={selectedEmotion} emotion={emotion} cardClickHandler={() => handleUserCardSelection(emotion)} />
+            )}
+          </Grid>
+        </Grid>
+        <Grid item xs={12}>
+          <div className='mood-test-action-bar'>
+            <Button variant="contained" size="large" onClick={handleViewResultsClick}>View Results</Button>
+          </div>
+        </Grid>
       </Grid>
     </>
   )
@@ -102,14 +134,19 @@ function MoodTest() {
 // Main component - TeamMoodTracker
 export default function TeamMoodTracker() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<BeginMoodCheckIn />} />
-        <Route path="/newuser" element={<NewUser />} />
-        <Route path="/moodchecker" element={<BeginMoodCheckIn />} />
-        <Route path="/moodchecker/:testId" element={<MoodTest />} />
-        <Route path="/moodchecker/results/:testId" element={<MoodTestResults />} />
-      </Routes>
-    </BrowserRouter>
+    <>
+      <ResponsiveAppBar />
+      <Container maxWidth="lg">
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<BeginMoodCheckIn />} />
+            <Route path="/newuser" element={<NewUser />} />
+            <Route path="/moodchecker" element={<BeginMoodCheckIn />} />
+            <Route path="/moodchecker/:testId" element={<MoodTest />} />
+            <Route path="/moodchecker/results/:testId" element={<MoodTestResults />} />
+          </Routes>
+        </BrowserRouter>
+      </Container>
+    </>
   )
 }

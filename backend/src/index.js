@@ -19,7 +19,57 @@ const teamMoodData = {
                     "user": "bhargav",
                     "mood": "happy",
                     "feeling": ""
-                }
+                },
+                "U-EmmaWatson": {
+                    "user": "EmmaWatson",
+                    "mood": "great",
+                    "feeling": "happy,excited,calm,okay,focused"
+                  },
+                  "U-RobertDowneyJr": {
+                    "user": "RobertDowneyJr",
+                    "mood": "ok",
+                    "feeling": "neutral,moderate,stable,composed,content"
+                  },
+                  "U-ScarlettJohansson": {
+                    "user": "ScarlettJohansson",
+                    "mood": "not ok",
+                    "feeling": "sad,depressed,sick,tired,uncomfortable"
+                  },
+                  "U-BradPitt": {
+                    "user": "BradPitt",
+                    "mood": "bad",
+                    "feeling": "upset,frustrated,furious,mad,angry"
+                  },
+                  "U-JenniferLawrence": {
+                    "user": "JenniferLawrence",
+                    "mood": "great",
+                    "feeling": "happy,excited,calm,okay,focused"
+                  },
+                  "U-LeonardoDiCaprio": {
+                    "user": "LeonardoDiCaprio",
+                    "mood": "ok",
+                    "feeling": "neutral,moderate,stable,composed,content"
+                  },
+                  "U-MilaKunis": {
+                    "user": "MilaKunis",
+                    "mood": "not ok",
+                    "feeling": "sad,depressed,sick,tired,uncomfortable"
+                  },
+                  "U-ChrisHemsworth": {
+                    "user": "ChrisHemsworth",
+                    "mood": "bad",
+                    "feeling": "upset,frustrated,furious,mad,angry"
+                  },
+                  "U-NataliePortman": {
+                    "user": "NataliePortman",
+                    "mood": "ok",
+                    "feeling": "neutral,moderate,stable,composed,content"
+                  },
+                  "U-TomHanks": {
+                    "user": "TomHanks",
+                    "mood": "great",
+                    "feeling": "happy,excited,calm,okay,focused"
+                  }
             }
         }
     }

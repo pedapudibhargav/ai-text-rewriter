@@ -20,12 +20,8 @@
     box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
 }
 
-.card-5 {
+.card-5, .MuiPaper-root.mood-card-paper-active {
     box-shadow: 0 19px 38px rgba(0, 0, 0, 0.30), 0 15px 12px rgba(0, 0, 0, 0.22);
-}
-
-.mood-test-container {
-    height: 80vh;
 }
 
 .mood-card-paper {
@@ -49,8 +45,9 @@
 
 .modd-card-heading {
     opacity: 0.9;
-    font-size: 2.5rem;
+    font-size: 2rem;
     text-transform: capitalize;
+    font-weight: 400;
 }
 
 .modd-emojis {
@@ -92,6 +89,13 @@
     width: 90%;
 }
 
-.begin-test-container {
-    height: 80vh;
+.test-header {
+    text-align: center;
+}
+
+.mood-test-action-bar {
+    margin-top: 20px;
+}
+.mood-test-grid.MuiGrid-root {
+    margin-top: 20px;
 }

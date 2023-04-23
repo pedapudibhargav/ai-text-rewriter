@@ -33,8 +33,8 @@ export default function BeginMoodCheckIn() {
 
   // Validate user input
   const validateTestName = (inputString) => {
-    // check if input lenth is less than 30 characters
-    return inputString.length < 30;
+    // check if input lenth is less than 80 characters
+    return inputString.length < 80;
   }
 
 
@@ -44,6 +44,7 @@ export default function BeginMoodCheckIn() {
       setTouched(true);
       return;
     }
+    console.log('unique number:', uniqueNumber);
     localStorage.setItem("testName", testName);
     console.log(`BE_URL:${BE_URL}`);
     const NEW_GAME_API = `${BE_URL}/api/v1/newgame?gameId=${uniqueNumber}`;
@@ -64,12 +65,13 @@ export default function BeginMoodCheckIn() {
     <Grid className="begin-test-container" container direction="row" justifyContent="center" alignItems="center">
       <Grid item xs={5}>
         <Paper className='beging-test-paper'>
-          <p className="tyrnow-subhead">How is your team feeling</p>
+          <p className="tyrnow-subhead">Know how is your team feeling now.</p>
           <h2 className="tyrnow-heading">Team Mood Check-Ins</h2>
           {touched && !isTestNameValid && (
-            <Alert severity="warning" >Your test name should be minimum 1 character and max 30 characteres length</Alert>
+            <Alert severity="warning" >Your test name should be minimum 1 character and max 80 characteres length</Alert>
           )}
           <TextField className="tyrnow-team-name"
+            autoComplete='off'
             onChange={(e) => handleInputChange(e)}
             label="Enter Title for your Test" variant="outlined" />
           <Button variant="contained" size="large" onClick={() => handleNewTestClick()} >Try it for Free</Button>
