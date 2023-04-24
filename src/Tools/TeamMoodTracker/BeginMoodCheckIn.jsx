@@ -68,7 +68,7 @@ export default function BeginMoodCheckIn() {
       <Grid item xs={5}>
         <Paper className='beging-test-paper'>
           <p className="tyrnow-subhead">Know how is your team feeling now.</p>
-          <h2 className="tyrnow-heading">Team Mood Check-Ins</h2>
+          <h2 className="tyrnow-heading">Team Mood Check-Ins.</h2>
           {touched && !isTestNameValid && (
             <Alert severity="warning" >Your test name should be minimum 1 character and max 80 characteres length</Alert>
           )}
