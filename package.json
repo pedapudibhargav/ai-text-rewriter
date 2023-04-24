@@ -25,7 +25,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "deploy": "BACKEND_HOST=http://147.28.148.227/api npm run build && gh-pages -d build"
+    "deploy": "REACT_APP_BACKEND_HOST=http://147.28.148.227/api npm run build && gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
