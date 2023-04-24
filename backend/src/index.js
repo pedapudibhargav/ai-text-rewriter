@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
+const apiRouter = express.Router();
 
 // defining the Express app
 const app = express();
@@ -89,13 +90,13 @@ app.use(cors());
 app.use(morgan('combined'));
 
 // defining an endpoint to return all ads
-app.get('/', (req, res) => {
+apiRouter.get('/', (req, res) => {
     res.send('Worked 🔥🔥🔥🔥🔥🔥!!!!');
 });
 
 
 // POST API to capture game data with security measures
-app.post('/captureGame/:gameId', (req, res) => {
+apiRouter.post('/captureGame/:gameId', (req, res) => {
     const gameId = req.params.gameId;
     const userSelection = req.body;
 
@@ -122,7 +123,7 @@ app.post('/captureGame/:gameId', (req, res) => {
 
 
 // Get API to capture new game
-app.get('/api/v1/newgame', (req, res) => {
+apiRouter.get('/api/v1/newgame', (req, res) => {
     console.log('Entering new game API');
     const gameId = req.query.gameId;
     teamMoodData["moodtest"][`T-${gameId}`] = {
@@ -134,14 +135,14 @@ app.get('/api/v1/newgame', (req, res) => {
 
 
 // Get API to get game results
-app.get('/api/v1/allgames', (req, res) => {
+apiRouter.get('/api/v1/allgames', (req, res) => {
     console.log('Entering all games API');
     return res.status(200).json(teamMoodData);
 });
 
 
 // Get API to get game results
-app.get('/api/v1/moodtest/results', (req, res) => {
+apiRouter.get('/api/v1/moodtest/results', (req, res) => {
     console.log('Entering game results API');
     const gameId = req.query.gameId;
     if(!teamMoodData["moodtest"][`T-${gameId}`])
@@ -150,6 +151,8 @@ app.get('/api/v1/moodtest/results', (req, res) => {
     return res.status(200).json(results);
 });
 
+// Mount the API router with the '/api' prefix:
+app.use('/api', apiRouter);
 
 // starting the server
 app.listen(3002, () => {
