@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Grid, Paper, Button, Container } from "@mui/material";
+import { Grid, Paper, Button, Container, IconButton } from "@mui/material";
 import {
   useParams, Route, Routes, BrowserRouter, useNavigate
 } from "react-router-dom";
@@ -14,6 +14,8 @@ import okImage from './images/moods/ok2.png';
 import nookImage from './images/moods/notok2.png';
 import angryImage from './images/moods/angry2.png';
 import ThankYou from './Components/ThankYou';
+import SendIcon from '@mui/icons-material/Send';
+import DoneIcon from '@mui/icons-material/Done';
 
 const BE_HOST = process.env.REACT_APP_BACKEND_HOST;
 
@@ -77,12 +79,13 @@ function MoodCard(props) {
 function MoodTest() {
   const [testname, setTestname] = React.useState(localStorage.getItem('testName'));
   const [username, setUsername] = useState(localStorage.getItem('username'));
+  const [enableCopiedView, setEnableCopiedView] = useState(false);
   const [selectedEmotion, setSelectedEmotion] = React.useState(null);
   let { testId } = useParams();
   const navigate = useNavigate();
 
 
-  useEffect(() => {    
+  useEffect(() => {
     if (!username) {
       navigate('/newuser');
     }
@@ -92,6 +95,18 @@ function MoodTest() {
   // handle view test results button click
   const handleViewResultsClick = () => {
     navigate(`/moodchecker/results/${testId}`);
+  }
+
+
+  // handle share button click
+  const handleShareButtonClick = () => {
+    const shareUrl = `${window.location.origin}/moodchecker/${testId}`;
+    console.log(`Copied URL:${shareUrl}`);
+    navigator.clipboard.writeText(shareUrl);
+    setEnableCopiedView(true);
+    setTimeout(() => {
+      setEnableCopiedView(false);
+    }, "1500");
   }
 
 
@@ -150,7 +165,10 @@ function MoodTest() {
         <Grid item xs={12}>
           <div className='mood-test-action-bar'>
             <Button variant="contained" size="large" sx={{ mr: 2 }} onClick={handleViewResultsClick}>View Results</Button>
-            <Button variant="contained" size="large" onClick={() => navigate(`/moodchecker/thankyou/${testId}`)}>Submit</Button>
+            <Button variant="contained" size="large" sx={{ mr: 2 }} onClick={() => navigate(`/moodchecker/thankyou/${testId}`)}>Submit</Button>
+            <Button variant="outlined" size="large" onClick={handleShareButtonClick} endIcon={enableCopiedView ? <DoneIcon /> : <SendIcon />}>
+              {enableCopiedView ? 'Copied' : 'Share' }
+            </Button>
           </div>
         </Grid>
       </Grid>
