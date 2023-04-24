@@ -21,10 +21,11 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "REACT_APP_BACKEND_HOST=http://localhost:3002 react-scripts start",
+    "start": "REACT_APP_BACKEND_HOST=http://localhost:3002/api react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "deploy": "BACKEND_HOST=http://147.28.148.227/api npm run build && gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -43,5 +44,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "gh-pages": "^5.0.0"
   }
 }
