@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Grid, Paper, Button, Container } from "@mui/material";
 import {
   useParams, Route, Routes, BrowserRouter, useNavigate
@@ -10,9 +10,10 @@ import BeginMoodCheckIn from './BeginMoodCheckIn';
 import NewUser from './NewUser';
 import ResponsiveAppBar from './ResponsiveAppBar';
 import happyImage from './images/moods/happy.png';
-import okImage from './images/moods/ok.png';
-import nookImage from './images/moods/nook.png';
-import angryImage from './images/moods/angry.png';
+import okImage from './images/moods/ok2.png';
+import nookImage from './images/moods/notok2.png';
+import angryImage from './images/moods/angry2.png';
+import ThankYou from './Components/ThankYou';
 
 const BE_HOST = process.env.REACT_APP_BACKEND_HOST;
 
@@ -80,6 +81,14 @@ function MoodTest() {
   let { testId } = useParams();
   const navigate = useNavigate();
 
+
+  useEffect(() => {    
+    if (!username) {
+      navigate('/newuser');
+    }
+  }, []);
+
+
   // handle view test results button click
   const handleViewResultsClick = () => {
     navigate(`/moodchecker/results/${testId}`);
@@ -140,7 +149,8 @@ function MoodTest() {
         </Grid>
         <Grid item xs={12}>
           <div className='mood-test-action-bar'>
-            <Button variant="contained" size="large" onClick={handleViewResultsClick}>View Results</Button>
+            <Button variant="contained" size="large" sx={{ mr: 2 }} onClick={handleViewResultsClick}>View Results</Button>
+            <Button variant="contained" size="large" onClick={() => navigate(`/moodchecker/thankyou/${testId}`)}>Submit</Button>
           </div>
         </Grid>
       </Grid>
@@ -162,6 +172,7 @@ export default function TeamMoodTracker() {
             <Route path="/moodchecker" element={<BeginMoodCheckIn />} />
             <Route path="/moodchecker/:testId" element={<MoodTest />} />
             <Route path="/moodchecker/results/:testId" element={<MoodTestResults />} />
+            <Route path="/moodchecker/thankyou/:testId" element={<ThankYou />} />
           </Routes>
         </BrowserRouter>
       </Container>

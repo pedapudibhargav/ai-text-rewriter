@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Grid, Paper, Button, TextField, Alert } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import './BeginMoodCheckIn.css';
 
 export default function BeginMoodCheckIn() {
 
@@ -39,8 +40,9 @@ export default function BeginMoodCheckIn() {
 
 
   // handle new test button click
-  const handleNewTestClick = () => {
-    if(!isTestNameValid) {
+  const handleNewTestClick = (e) => {
+    e.preventDefault();
+    if (!isTestNameValid) {
       setTouched(true);
       return;
     }
@@ -70,11 +72,13 @@ export default function BeginMoodCheckIn() {
           {touched && !isTestNameValid && (
             <Alert severity="warning" >Your test name should be minimum 1 character and max 80 characteres length</Alert>
           )}
-          <TextField className="tyrnow-team-name"
-            autoComplete='off'
-            onChange={(e) => handleInputChange(e)}
-            label="Enter Title for your Test" variant="outlined" />
-          <Button variant="contained" size="large" onClick={() => handleNewTestClick()} >Try it for Free</Button>
+          <form onSubmit={handleNewTestClick}>
+            <TextField className="tyrnow-team-name"
+              autoComplete='off'
+              onChange={(e) => handleInputChange(e)}
+              label="Enter Title for your Test" variant="outlined" />
+            <Button variant="contained" size="large" onClick={handleNewTestClick} >Try it for Free</Button>
+          </form>
         </Paper>
       </Grid>
     </Grid>

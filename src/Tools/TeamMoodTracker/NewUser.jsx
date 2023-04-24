@@ -20,7 +20,7 @@ export default function NewUser() {
         e.preventDefault();
         localStorage.setItem("username", name);
         console.log('usename saved 2:', name);
-        navigate(`/moodchecker`);
+        navigate(-2);
     };
 
     const handleInputChange = (e) => {
@@ -32,8 +32,8 @@ export default function NewUser() {
 
     // Validate user name
     function validateUsername(username) {
-        const regex = /^[a-zA-Z0-9_]{3,20}$/;
-        return regex.test(username);
+        const regex = /^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/;
+        return regex.test(username.trim());
     }
 
     return (

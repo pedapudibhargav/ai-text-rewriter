@@ -38,6 +38,11 @@ export default function MoodTestResults() {
         navigate(`/moodchecker`);
     }
 
+    // go back to test screen
+    const handleBackToTest = () => {        
+        navigate(`/moodchecker/${testId}`);
+    }
+
 
     const processUserFeelingData = () => {
         const userFeelingData = testResults;
@@ -79,6 +84,7 @@ export default function MoodTestResults() {
 
                 </CardContent>
                 <CardActions className='test-results-actions'>
+                    <Button variant="outlined" size="large" onClick={handleBackToTest}>Back</Button>
                     <Button variant="contained" size="large" onClick={handleCreateNewTest}>Create New Test</Button>
                 </CardActions>
             </Card>
