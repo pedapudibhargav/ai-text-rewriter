@@ -3,11 +3,15 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Card, CardContent, Button, CardActions } from "@mui/material";
 import { RadarChart } from './Results/RadarChart';
 import './MoodTestResults.css';
+import RefreshIcon from '@mui/icons-material/Refresh';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+
 
 export default function MoodTestResults() {
     let { testId } = useParams();
     const [testResults, setTestResults] = useState([]);
     const [chartDataset, setChartDataset] = useState(null);
+    const [participants, setParticipants] = useState([]);
     const navigate = useNavigate();
     const BE_URL = process.env.REACT_APP_BACKEND_HOST;
     let counter = 0;
@@ -28,6 +32,7 @@ export default function MoodTestResults() {
         const RESULTS_API = `${BE_URL}/api/v1/moodtest/results?gameId=${testId}`;
         fetch(RESULTS_API).then(response => response.json()).then((data) => {
             console.log('response data:', data);
+            setParticipants(data['users']);
             setTestResults(data['results']);
         });
     };
@@ -39,22 +44,20 @@ export default function MoodTestResults() {
     }
 
     // go back to test screen
-    const handleBackToTest = () => {        
+    const handleBackToTest = () => {
         navigate(`/moodchecker/${testId}`);
     }
 
 
     const processUserFeelingData = () => {
-        const userFeelingData = testResults;
-        const moodCount = { 'great': 0, 'ok': 0, 'not ok': 0, 'bad': 0 };
-        for (const key in userFeelingData) {
-            const mood = userFeelingData[key].mood;
-            if (!moodCount[mood])
-                moodCount[mood] = 0;
-            moodCount[mood]++;
-        }
-        const labels = Object.keys(moodCount).sort();
-        const data = labels.map(mood => moodCount[mood]);
+        let moodCount = { 'great': 0, 'ok': 0, 'not ok': 0, 'bad': 0 };
+        if(testResults && testResults) 
+            moodCount = testResults; 
+        const labels = Object.keys(moodCount).sort();   
+        const data = labels.map((mood) => {
+            return moodCount[mood];
+        }); 
+        console.log('data', data);       
         return {
             'labels': labels,
             'datasets': [
@@ -81,11 +84,17 @@ export default function MoodTestResults() {
                             </> :
                             <p>Loading...</p>
                     }
-
+                <p>Participants:{participants.join(',')}</p>
                 </CardContent>
                 <CardActions className='test-results-actions'>
-                    <Button variant="outlined" size="large" onClick={handleBackToTest}>Back</Button>
+                    {/* <Button variant="outlined" size="large" onClick={handleBackToTest}>Back</Button> */}
+                    <Button variant="outlined" size="large" onClick={handleBackToTest} startIcon={<ArrowBackIcon />}>
+                        Back
+                    </Button>
                     <Button variant="contained" size="large" onClick={handleCreateNewTest}>Create New Test</Button>
+                    <Button variant="outlined" size="large" onClick={getTestResults} endIcon={<RefreshIcon />}>
+                        Refresh
+                    </Button>
                 </CardActions>
             </Card>
         </>

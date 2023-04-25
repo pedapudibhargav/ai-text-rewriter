@@ -49,7 +49,7 @@ export default function BeginMoodCheckIn() {
     console.log('unique number:', uniqueNumber);
     localStorage.setItem("testName", testName);
     console.log(`BE_URL:${BE_URL}`);
-    const NEW_GAME_API = `${BE_URL}/api/v1/newgame?gameId=${uniqueNumber}`;
+    const NEW_GAME_API = `${BE_URL}/api/v1/newgame?gameId=${uniqueNumber}&organizer=${username}`;
     fetch(NEW_GAME_API).then((response) => {
       if (response.ok) {
         console.log(`New game created:`, response.json());

@@ -14,7 +14,7 @@ export default function ThankYou() {
 
     // go back to test screen
     const handleUpdateTest = () => {
-        navigate(`/moodchecker/:${testId}`);
+        navigate(`/moodchecker/${testId}`);
     }
 
     return (
@@ -25,8 +25,8 @@ export default function ThankYou() {
                     <p>Thanks for using our app to track your emotions and well-being.</p>
                 </CardContent>
                 <CardActions sx={{justifyContent: "center", mb:4}}>
-                    <Button size="large" variant="outlined" onClick={handleCreateNewTest}>Create New Test</Button>
-                    <Button size="large" variant="contained" onClick={handleUpdateTest}>Change your choice</Button>
+                    {/* <Button size="large" variant="outlined" onClick={handleCreateNewTest}>Create New Test</Button> */}
+                    <Button size="large" variant="outlined" onClick={handleUpdateTest}>Change your choice</Button>
                 </CardActions>
             </Card>
         </Grid>

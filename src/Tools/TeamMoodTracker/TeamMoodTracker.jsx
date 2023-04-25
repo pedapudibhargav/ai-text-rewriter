@@ -63,7 +63,7 @@ function MoodCard(props) {
   return (
     <Grid item xs={3}>
       <Paper className={cardSelectedClass()} style={getBackgroundStyle(props.emotion)} onClick={() => handleCardClick()}>
-        <h2 className='modd-card-heading'>{props.emotion.overall}</h2>
+        {/* <h2 className='modd-card-heading'>{props.emotion.overall}</h2> */}
         <img className='mood-card-img' src={getCardImageSrc(props.emotion.overall)} alt={`${props.emotion.overall} image`} />
         <p className='mood-card-subcategories'>
           <span className='modd-emojis'>{props.emotion.emojis.join(' ')}</span>
@@ -79,6 +79,7 @@ function MoodCard(props) {
 function MoodTest() {
   const [testname, setTestname] = React.useState(localStorage.getItem('testName'));
   const [username, setUsername] = useState(localStorage.getItem('username'));
+  const [isOrganizer, setIsOrganizer] = useState(false);
   const [enableCopiedView, setEnableCopiedView] = useState(false);
   const [selectedEmotion, setSelectedEmotion] = React.useState(null);
   let { testId } = useParams();
@@ -89,8 +90,16 @@ function MoodTest() {
     if (!username) {
       navigate('/newuser');
     }
+    getOrganizerName();
   }, []);
 
+  const getOrganizerName = () => {
+    const BE_API = `${BE_HOST}/v1/moodtest/organizer/${testId}`;
+    fetch(BE_API).then(response => response.json()).then(data => {
+      console.log('Organizer name:', data);
+      data.includes(username) ? setIsOrganizer(true) : setIsOrganizer(false);      
+    });
+  }
 
   // handle view test results button click
   const handleViewResultsClick = () => {
@@ -138,6 +147,7 @@ function MoodTest() {
       });
       const result = await response.json();
       console.log("Success:", result);
+      navigate(`/moodchecker/thankyou/${testId}`)
     } catch (error) {
       console.error("Error:", error);
     }
@@ -164,8 +174,11 @@ function MoodTest() {
         </Grid>
         <Grid item xs={12}>
           <div className='mood-test-action-bar'>
-            <Button variant="contained" size="large" sx={{ mr: 2 }} onClick={handleViewResultsClick}>View Results</Button>
-            <Button variant="contained" size="large" sx={{ mr: 2 }} onClick={() => navigate(`/moodchecker/thankyou/${testId}`)}>Submit</Button>
+            {
+              isOrganizer ?
+                <Button variant="contained" size="large" sx={{ mr: 2 }} onClick={handleViewResultsClick}>View Results</Button> :
+                null
+            }
             <Button variant="outlined" size="large" onClick={handleShareButtonClick} endIcon={enableCopiedView ? <DoneIcon /> : <SendIcon />}>
               {enableCopiedView ? 'Copied' : 'Share' }
             </Button>
