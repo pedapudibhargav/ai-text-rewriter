@@ -84,7 +84,7 @@ export default function MoodTestResults() {
                             </> :
                             <p>Loading...</p>
                     }
-                <p>Participants:{participants.join(',')}</p>
+                <p><b>Participants:</b> {participants.join(', ')}</p>
                 </CardContent>
                 <CardActions className='test-results-actions'>
                     {/* <Button variant="outlined" size="large" onClick={handleBackToTest}>Back</Button> */}

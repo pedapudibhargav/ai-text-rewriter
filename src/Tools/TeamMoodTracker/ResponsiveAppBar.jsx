@@ -12,6 +12,8 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
+import LogoImg from './images/mindTune-min.png';
+import './ResponsiveAppBar.css';
 
 const pages = ['Products', 'Pricing', 'Blog'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
@@ -39,7 +41,7 @@ function ResponsiveAppBar() {
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+          <img src={LogoImg} className='logo-img' alt="mind tune logo" />
           <Typography
             variant="h6"
             noWrap
@@ -47,15 +49,16 @@ function ResponsiveAppBar() {
             href="/"
             sx={{
               mr: 2,
+              ml: 1,
+              fontSize: '1.5rem',
               display: { xs: 'none', md: 'flex' },
-              fontFamily: 'monospace',
               fontWeight: 700,
               letterSpacing: '.3rem',
               color: 'inherit',
               textDecoration: 'none',
             }}
           >
-            LOGO
+            MindTune
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -114,7 +117,7 @@ function ResponsiveAppBar() {
             LOGO
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page) => (
+            {/* {pages.map((page) => (
               <Button
                 key={page}
                 onClick={handleCloseNavMenu}
@@ -122,7 +125,7 @@ function ResponsiveAppBar() {
               >
                 {page}
               </Button>
-            ))}
+            ))} */}
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>

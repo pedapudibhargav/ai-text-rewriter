@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Grid, Paper, Button, Container, IconButton } from "@mui/material";
+import { Grid, Paper, Button, Container, IconButton, Typography } from "@mui/material";
 import {
   useParams, Route, Routes, BrowserRouter, useNavigate
 } from "react-router-dom";
@@ -97,7 +97,7 @@ function MoodTest() {
     const BE_API = `${BE_HOST}/v1/moodtest/organizer/${testId}`;
     fetch(BE_API).then(response => response.json()).then(data => {
       console.log('Organizer name:', data);
-      data.includes(username) ? setIsOrganizer(true) : setIsOrganizer(false);      
+      data.includes(username) ? setIsOrganizer(true) : setIsOrganizer(false);
     });
   }
 
@@ -158,11 +158,14 @@ function MoodTest() {
       <Grid container className="mood-test-grid" spacing={2} direction="column" justifyContent="center" alignItems="center">
         <Grid item xs={12}>
           <header className='test-header'>
-            {
+            {/* {
               (testname && testname !== '') ?
                 <h1>{testname}</h1> :
                 <h1>How are you feeling today?</h1>
-            }
+            } */}
+            <Typography variant="body1" sx={{ fontSize: '1.3rem', mb: 2, mt:2 }} gutterBottom>
+              Choose the card that best represents your current mood.
+            </Typography>
           </header>
         </Grid>
         <Grid item xs={12}>
@@ -180,7 +183,7 @@ function MoodTest() {
                 null
             }
             <Button variant="outlined" size="large" onClick={handleShareButtonClick} endIcon={enableCopiedView ? <DoneIcon /> : <SendIcon />}>
-              {enableCopiedView ? 'Copied' : 'Share' }
+              {enableCopiedView ? 'Copied' : 'Share'}
             </Button>
           </div>
         </Grid>

@@ -54,6 +54,7 @@ export default function NewUser() {
                             label="Enter your name"
                             variant="outlined"
                             value={name}
+                            autoComplete='off'
                             onChange={(e) => handleInputChange(e)}
                         />
                         {/* <Button type="submit" variant="contained" color="primary">
