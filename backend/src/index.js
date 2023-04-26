@@ -83,8 +83,18 @@ app.use(helmet());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// enabling CORS for all requests
-app.use(cors());
+// Allow access from multiple origins
+const allowedOrigins = ['http://localhost:3000', 'https://pedapudibhargav.github.io', 'https://mindtune.appnirvana.co'];
+app.use(cors({
+    origin: function(origin, callback) {
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.indexOf(origin) === -1) {
+            const msg = 'The CORS policy for this site does not allow access from the specified origin.';
+            return callback(new Error(msg), false);
+        }
+        return callback(null, true);
+    }
+}));
 
 // adding morgan to log HTTP requests
 app.use(morgan('combined'));
