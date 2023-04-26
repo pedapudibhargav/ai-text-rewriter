@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { TextField, Button, Card, CardContent, CardActions, Alert } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import './NewUser.css';
 
 export default function NewUser() {
@@ -8,9 +8,12 @@ export default function NewUser() {
     const [touched, setTouched] = useState(false);
     const [isValid, setIsValid] = useState(false);
     const navigate = useNavigate();
+    const location = useLocation();
+    const from = location.state?.from;
 
     useEffect(() => {
         const storedName = localStorage.getItem("username");
+        console.log(`previous page:${from}`);
         if (storedName) {
             setName(storedName);
         }
@@ -20,7 +23,8 @@ export default function NewUser() {
         e.preventDefault();
         localStorage.setItem("username", name);
         console.log('usename saved 2:', name);
-        navigate(-2);
+        // navigate to either previous page or moodchecker
+        from ? navigate(from) : navigate(`/moodchecker`);
     };
 
     const handleInputChange = (e) => {

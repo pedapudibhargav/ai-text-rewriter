@@ -19,7 +19,8 @@ export default function BeginMoodCheckIn() {
     console.log('LS-usename:' + localStorage.getItem('username'));
     console.log(`username:${username}`);
     if (!username) {
-      navigate(`/newuser`);
+      console.log('Redirecting to new user page..');
+      navigate(`/newuser`, { state: { from: `/moodchecker` } });
     }
   }, []);
 

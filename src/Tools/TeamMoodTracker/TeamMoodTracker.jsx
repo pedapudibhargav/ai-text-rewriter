@@ -88,7 +88,8 @@ function MoodTest() {
 
   useEffect(() => {
     if (!username) {
-      navigate('/newuser');
+      console.log('redirecting to newuser page.... from TeamMoodTracker');
+      navigate('/newuser', { state: { from: `/moodchecker/${testId}` } });
     }
     getOrganizerName();
   }, []);
@@ -96,7 +97,6 @@ function MoodTest() {
   const getOrganizerName = () => {
     const BE_API = `${BE_HOST}/v1/moodtest/organizer/${testId}`;
     fetch(BE_API).then(response => response.json()).then(data => {
-      console.log('Organizer name:', data);
       data.includes(username) ? setIsOrganizer(true) : setIsOrganizer(false);
     });
   }
