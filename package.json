@@ -22,7 +22,7 @@
   },
   "scripts": {
     "start": "REACT_APP_BACKEND_HOST=http://localhost:3002/api react-scripts start",
-    "build": "REACT_APP_BACKEND_HOST=http://147.28.148.227/api react-scripts build",
+    "build": "REACT_APP_BACKEND_HOST=https://api.appnirvana.co/api react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "deploy": "npm run build && gh-pages -d build"
