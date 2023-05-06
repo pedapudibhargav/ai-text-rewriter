@@ -1,19 +1,14 @@
 import React, { useState, useEffect } from 'react'
-import { Grid, Paper, Button, Container, IconButton, Typography } from "@mui/material";
+import { Grid, Paper, Button, Typography } from "@mui/material";
 import {
-  useParams, Route, Routes, BrowserRouter, useNavigate
+  useParams, useNavigate
 } from "react-router-dom";
 import './TeamMoodTracker.css';
 import { emotions } from './Emotions.js';
-import MoodTestResults from './MoodTestResults';
-import BeginMoodCheckIn from './BeginMoodCheckIn';
-import NewUser from './NewUser';
-import ResponsiveAppBar from './ResponsiveAppBar';
 import happyImage from './images/moods/happy.png';
 import okImage from './images/moods/ok2.png';
 import nookImage from './images/moods/notok2.png';
 import angryImage from './images/moods/angry2.png';
-import ThankYou from './Components/ThankYou';
 import SendIcon from '@mui/icons-material/Send';
 import DoneIcon from '@mui/icons-material/Done';
 
@@ -192,24 +187,7 @@ function MoodTest() {
   )
 }
 
-
-// Main component - TeamMoodTracker
-export default function TeamMoodTracker() {
-  return (
-    <>
-      <ResponsiveAppBar />
-      <Container maxWidth="lg">
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<BeginMoodCheckIn />} />
-            <Route path="/newuser" element={<NewUser />} />
-            <Route path="/moodchecker" element={<BeginMoodCheckIn />} />
-            <Route path="/moodchecker/:testId" element={<MoodTest />} />
-            <Route path="/moodchecker/results/:testId" element={<MoodTestResults />} />
-            <Route path="/moodchecker/thankyou/:testId" element={<ThankYou />} />
-          </Routes>
-        </BrowserRouter>
-      </Container>
-    </>
-  )
+export {
+  MoodTest,
+  MoodCard,
 }
