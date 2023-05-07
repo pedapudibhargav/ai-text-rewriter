@@ -28,8 +28,8 @@
     text-align: center;
     display: flex;
     flex-direction: column;
-    height: 300px;
-    width: 80%;
+    height: 320px;
+    width: 100%;
     padding: 10%;
 }
 
@@ -61,14 +61,6 @@
     text-transform: capitalize;
 }
 
-/* Begin test */
-.MuiPaper-root.beging-test-paper {
-    height: 300px;
-    padding: 10%;
-    border-radius: 10px;
-    text-align: center;
-}
-
 .tyrnow-subhead {
     margin-bottom: 10px;
 }
@@ -80,14 +72,6 @@
     line-height: 1.2em; 
 }
 
-.MuiTextField-root.tyrnow-team-name {
-    margin-top: 60px;
-    opacity: 0.9;
-    margin-bottom: 20px;
-    border-radius: 5px;
-    width: 90%;
-}
-
 .test-header {
     text-align: center;
 }
@@ -97,4 +81,11 @@
 }
 .mood-test-grid.MuiGrid-root {
     margin-top: 20px;
+}
+
+.mood-eomjis-description {
+    font-size: 1rem;
+    line-height: 0%;
+    font-weight: 400;
+    opacity: 0.8;
 }

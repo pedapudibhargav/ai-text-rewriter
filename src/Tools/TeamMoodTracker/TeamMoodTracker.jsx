@@ -61,8 +61,8 @@ function MoodCard(props) {
         {/* <h2 className='modd-card-heading'>{props.emotion.overall}</h2> */}
         <img className='mood-card-img' src={getCardImageSrc(props.emotion.overall)} alt={`${props.emotion.overall} image`} />
         <p className='mood-card-subcategories'>
-          <span className='modd-emojis'>{props.emotion.emojis.join(' ')}</span>
-          {props.emotion.subCategories.join(', ')}
+          <span className='modd-emojis'>{props.emotion.emojis.join(' ')}</span><br/>
+          <span className='mood-eomjis-description'>{props.emotion.subCategories.join(', ')}</span>
         </p>
       </Paper>
     </Grid>
