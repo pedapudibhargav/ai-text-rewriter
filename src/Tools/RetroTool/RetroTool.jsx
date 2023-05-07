@@ -1,7 +1,10 @@
 import React from 'react'
+import Board from './components/Board'
 
 export default function RetroTool() {
   return (
-    <div>Coming Soon....</div>
+    <div>
+      <Board/>
+    </div>
   )
 }
