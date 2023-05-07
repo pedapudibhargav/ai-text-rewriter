@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Grid, Paper, Button, TextField, Alert } from "@mui/material";
+import {
+  Grid, Paper, Button, TextField, Alert, Container,
+  Card, CardContent, Typography, CardActions, Box
+} from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import './BeginMoodCheckIn.css';
 
@@ -65,23 +68,50 @@ export default function BeginMoodCheckIn() {
 
 
   return (
-    <Grid className="begin-test-container" container direction="row" justifyContent="center" alignItems="center">
-      <Grid item xs={5}>
-        <Paper className='beging-test-paper'>
-          <p className="tyrnow-subhead">Know how is your team feeling now.</p>
-          <h2 className="tyrnow-heading">Team Mood Check-Ins.</h2>
-          {touched && !isTestNameValid && (
-            <Alert severity="warning" >Your test name should be minimum 1 character and max 80 characteres length</Alert>
-          )}
-          <form onSubmit={handleNewTestClick}>
-            <TextField className="tyrnow-team-name"
-              autoComplete='off'
-              onChange={(e) => handleInputChange(e)}
-              label="Enter Title for your Test" variant="outlined" />
-            <Button variant="contained" size="large" onClick={handleNewTestClick} >Try it for Free</Button>
-          </form>
-        </Paper>
+    <Container fixed sx={{ mt: 4 }}>
+      <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+        <Grid container direction="row" justifyContent="center" alignItems="center">
+          <Grid item xs={6}>
+            <Paper>
+              {/* <p className="tyrnow-subhead"></p>
+              <h2 className="tyrnow-heading"></h2>
+              {touched && !isTestNameValid && (
+                <Alert severity="warning" >Your test name should be minimum 1 character and max 80 characteres length</Alert>
+              )}
+              <form onSubmit={handleNewTestClick}>
+                <TextField
+                  autoComplete='off'
+                  onChange={(e) => handleInputChange(e)}
+                  label="Enter Title for your Test" variant="outlined" />
+                <Button variant="contained" size="large" onClick={handleNewTestClick} >Try it for Free</Button>
+              </form> */}
+              <Card sx={{ minWidth: 275 }}>
+                <CardContent sx={{textAlign:"center"}}>
+                  <Typography color="text.secondary" gutterBottom>
+                    Know how is your team feeling now.
+                  </Typography>
+                  <Typography variant="h5" component="div" sx={{mb:3}}>
+                    Team Mood Check-Ins.
+                  </Typography>
+                  {touched && !isTestNameValid && (
+                    <Alert severity="warning" >Your test name should be minimum 1 character and max 80 characteres length</Alert>
+                  )}
+                  <form onSubmit={handleNewTestClick}>
+                    <TextField
+                      autoComplete='off'
+                      fullWidth
+                      onChange={(e) => handleInputChange(e)}
+                      label="Enter Title for your Test" variant="outlined" />
+                  </form>
+                </CardContent>
+                <CardActions justifyContent="center" alignItems="center" sx={{justifyContent:'center'}}>
+                  <Button variant="contained" size="large" sx={{maring:'auto', mb:2}} onClick={handleNewTestClick} >Try it for Free</Button>
+                </CardActions>
+              </Card>
+            </Paper>
+          </Grid>
+        </Grid>
       </Grid>
-    </Grid>
+    </Container>
   )
 }
