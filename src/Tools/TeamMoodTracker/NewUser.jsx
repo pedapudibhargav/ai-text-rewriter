@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import { TextField, Button, Card, CardContent, CardActions, Alert } from "@mui/material";
 import { useNavigate, useLocation } from "react-router-dom";
 import './NewUser.css';

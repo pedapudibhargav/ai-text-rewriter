@@ -6,6 +6,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import moodTrackerCardImage from './images/moodtracker_card.jpg';
 import retroToolCardImage from './images/retro_card.jpg';
+import teamsurveyToolCardImage from './images/teamsurvey.jpg';
 
 
 export default function Home() {
@@ -22,6 +23,12 @@ export default function Home() {
             description: "Streamline retrospectives, capture valuable feedback, and drive actionable improvements with our intuitive Retro Tool.",
             link: '/retrotool',
             imagePath: retroToolCardImage
+        },
+        {
+            name: 'Team Suvery - Coming Soon',
+            description: "Know what your team is thinking and feeling with our Team Survey tool. Ask the right questions, get the right answers.",
+            link: '/teamsurvey',
+            imagePath: teamsurveyToolCardImage
         }
     ];
 
@@ -40,13 +47,13 @@ export default function Home() {
                 <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                     {apps.map((app) => {
                         return (
-                            <Grid item xs={6}>
+                            <Grid item xs={4}>
                                 <Paper elevation={1}>
                                     <Card>
                                         <CardActionArea onClick={()=>handleCTAClick(app.link)}>
                                             <CardMedia
                                                 component="img"
-                                                height="140"
+                                                height="240"
                                                 image={app.imagePath}
                                                 alt="green iguana"
                                             />
