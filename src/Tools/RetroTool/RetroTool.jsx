@@ -1,12 +1,31 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import Board from './components/Board'
-import RegisterUserDialog from '../CommonComponents/RegisterUserDialog'
+import { useParams } from "react-router-dom";
+import RegisterUserDialog from '../CommonComponents/RegisterUserDialog';
+import { GetUserDetails } from '../Services/UserRegistrationService';
 
 export default function RetroTool() {
+  const { roomId } = useParams();
+  const [enableDialog, setEnableDialog] = useState(false);
+  const [userDetails, setUserDetails] = useState(null);
+
+  useEffect(() => {
+    setUserDetails(GetUserDetails());
+  }, []);
+
+  useEffect(() => {
+    userDetails === null || userDetails === undefined ? 
+      setEnableDialog(true) : setEnableDialog(false);
+  }, [userDetails]);
+
+  const registrationCallback = (userDetails) => {
+    setUserDetails(userDetails);
+  }
+
   return (
     <div>
-      <RegisterUserDialog open={true}/>
-      <Board/>
+      <RegisterUserDialog open={enableDialog} handleClose={() => setEnableDialog(false)} registrationCallback={registrationCallback} />
+      <Board />
     </div>
   )
 }

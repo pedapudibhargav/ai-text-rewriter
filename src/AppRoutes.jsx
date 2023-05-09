@@ -41,7 +41,7 @@ export default function AppRoutes() {
                             <Route path="/moodchecker/:testId" element={<MoodTest />} />
                             <Route path="/moodchecker/results/:testId" element={<MoodTestResults />} />
                             <Route path="/moodchecker/thankyou/:testId" element={<ThankYou />} />
-                            <Route path="/retrotool" element={<RetroTool />} />
+                            <Route path="/retrotool/:roomId" element={<RetroTool />} />
                             <Route path="/teamsurvey" element={<TeamSurvey />} />
                         </Routes>
                     </BrowserRouter>

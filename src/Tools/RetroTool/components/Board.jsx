@@ -101,7 +101,7 @@ export default function Board() {
                     {
                         boardData.map((board, boardIndex) => {
                             return (
-                                <Grid key={board.id} item xs={12 / boardData.length}>
+                                <Grid key={boardIndex} item xs={12 / boardData.length}>
                                     <Typography variant="h5" sx={{ textAlign: 'center' }} gutterBottom>
                                         {board.name}
                                         <Fab onClick={() => addBoardItem(boardIndex)} size="small" sx={{ mx: 2 }} color="primary" aria-label="add">
@@ -112,7 +112,7 @@ export default function Board() {
                                         {
                                             board.cards.map((card, cardIndex) => {
                                                 return (
-                                                    <BoardItem key={card.id} card={card} handleDelete={()=>deleteBoardItem(boardIndex,cardIndex)} />
+                                                    <BoardItem key={cardIndex} card={card} handleDelete={()=>deleteBoardItem(boardIndex,cardIndex)} />
                                                 )
                                             })
                                         }

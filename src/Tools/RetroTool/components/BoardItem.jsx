@@ -41,9 +41,7 @@ export default function BoardItem(props) {
         const votersIn = boardItem.votes ? boardItem.votes : [];
         // count the votes from votersIn array
         votersIn.forEach((vote) => {
-            console.log('vote:', vote);
             votesObj[vote.vote]++;
-            console.log('votesObj:', votesObj);
         });
 
         // Build Badges and return them
@@ -51,7 +49,7 @@ export default function BoardItem(props) {
             Object.entries(votesObj).map(([key, value]) => {
                 return (
                     value ?
-                    <Badge badgeContent={value} color="primary" sx={{mx:0.5}}>
+                    <Badge badgeContent={value} key={key} color="primary" sx={{mx:0.5}}>
                         <span style={{fontSize:'1.25rem'}}>{key}</span>
                     </Badge> : null
                 )
