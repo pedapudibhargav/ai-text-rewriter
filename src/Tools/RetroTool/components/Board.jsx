@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Grid, Container, CssBaseline, Typography, Fab, Box
 } from "@mui/material";
@@ -6,6 +6,8 @@ import AddIcon from '@mui/icons-material/Add';
 import BoardItem from './BoardItem';
 import NewBoardItem from './NewBoardItem';
 import BoardsTestData from './BoardsTestData';
+import { ConnectToRoomById } from '../../Services/RetroBoardServices';
+import { GetUserDetails } from '../../Services/UserRegistrationService';
 
 const newBoardItemDefault = {
     boardIndex: -1,
@@ -23,16 +25,24 @@ const defaultCardValues = {
         }
     ]
 }
-export default function Board() {
+export default function Board(props) {
+    const ROOM_ID = props.roomId;
     const [openDialog, setOpenDialog] = useState(false);
     const [dataToNewBoardItem, setDataToNewBoardItem] = useState(newBoardItemDefault);
     const voteOptions = ['👍', '👎', '🤐', '🤔'];
-    const [boardData, setBoardData] = useState(BoardsTestData);
+    const [currentUserDetails, setCurrentUserDetails] = useState(GetUserDetails());
+    const [retroBoardData, setRetroBoardData] = useState(BoardsTestData);
 
+    useEffect(() => {
+        ConnectToRoomById(ROOM_ID);
+        if (!currentUserDetails || !currentUserDetails.username)
+            setCurrentUserDetails((previousState) => ({ ...previousState, username: `Anonymous${Math.floor(Math.random() * 100)}` }))
+    }, []);
 
     const toggleDialog = (booleanFlag) => {
         setOpenDialog(booleanFlag);
     }
+
 
     const handleSaveBoardItem = (boardItem) => {
         console.log('boardItem:', boardItem);
@@ -41,8 +51,8 @@ export default function Board() {
             return alert("Sorry it's not you, it'us");
         }
         const boardIndexIn = boardItem.boardIndex;
-        const updatedBoardData = [...boardData];
-        const boardToBeUpdated = updatedBoardData[boardIndexIn];
+        const updatedBoardData = { ...retroBoardData };
+        const boardToBeUpdated = updatedBoardData.boards[boardIndexIn];
         if (!boardToBeUpdated) {
             return console.error('Board to be updated is not defined');
         }
@@ -51,7 +61,7 @@ export default function Board() {
             const newCard = { ...defaultCardValues };
             newCard['id'] = boardToBeUpdated['cards'].length + 1;
             newCard['content'] = boardItem['content'];
-            updatedBoardData[boardIndexIn]['cards'].push(newCard);
+            updatedBoardData.boards[boardIndexIn]['cards'].push(newCard);
         } else {
             // update card
             const cardToBeUpdated = boardToBeUpdated['cards'][boardItem.cardIndex];
@@ -59,9 +69,9 @@ export default function Board() {
                 return console.error('Card to be updated is not defined');
             }
             cardToBeUpdated['content'] = boardItem['content'];
-            updatedBoardData[boardIndexIn]['cards'][boardItem.cardIndex] = cardToBeUpdated;
+            updatedBoardData.boards[boardIndexIn]['cards'][boardItem.cardIndex] = cardToBeUpdated;
         }
-        setBoardData(updatedBoardData);
+        setRetroBoardData(updatedBoardData);
         toggleDialog(false);
     }
 
@@ -76,9 +86,9 @@ export default function Board() {
     }
 
     const editBoardItem = (boardIndex, cardIndex) => {
-        const boardData = boardData[boardIndex];
-        const cardData = boardData['cards'][cardIndex];
-        const cardContent = cardData['content'];
+        const boardIn = retroBoardData.boards[boardIndex];
+        const cardIn = boardIn['cards'][cardIndex];
+        const cardContent = cardIn['content'];
         setDataToNewBoardItem({
             boardIndex: boardIndex,
             cardIndex: cardIndex,
@@ -88,10 +98,39 @@ export default function Board() {
     }
 
     const deleteBoardItem = (boardIndex, cardIndex) => {
-        const updatedBoardData = [...boardData];
-        updatedBoardData[boardIndex]['cards'].splice(cardIndex, 1);
-        setBoardData(updatedBoardData);
+        const updatedBoardData = { ...retroBoardData };
+        updatedBoardData.boards[boardIndex]['cards'].splice(cardIndex, 1);
+        setRetroBoardData(updatedBoardData);
     }
+
+    const handleVoteUpdate = (boardIndex, cardIndex, vote) => {
+        const username = currentUserDetails.username;
+        const updatedBoardData = { ...retroBoardData };
+        const board = updatedBoardData.boards[boardIndex];
+        const card = board.cards[cardIndex];
+        const existingVoteIndex = card.votes.findIndex((v) => v.voter === username);
+
+        if (existingVoteIndex !== -1) {
+            // User already voted, update the existing vote
+            card.votes[existingVoteIndex].vote = vote;
+        } else {
+            // User is submitting a new vote
+            card.votes.push({ voter: username, vote: vote });
+        }
+
+        // Assign the updated card with votes back into BoardsTestData
+        updatedBoardData.boards[boardIndex].cards[cardIndex] = card;
+        setRetroBoardData(updatedBoardData);
+    };
+
+    const getUserVoteOnCard = (card) => {
+        const usernameIn = currentUserDetails.username;
+        const voteIndex = card.votes.findIndex((v) => v.voter === usernameIn);
+        if (voteIndex !== -1) {
+            return card.votes[voteIndex].vote;
+        }
+        return null;
+    };
 
     return (
         <React.Fragment>
@@ -99,9 +138,9 @@ export default function Board() {
             <Container maxWidth="false">
                 <Grid container spacing={2} sx={{ my: 2 }}>
                     {
-                        boardData.map((board, boardIndex) => {
+                        retroBoardData.boards.map((board, boardIndex) => {
                             return (
-                                <Grid key={boardIndex} item xs={12 / boardData.length}>
+                                <Grid key={boardIndex} item xs={12 / retroBoardData.boards.length}>
                                     <Typography variant="h5" sx={{ textAlign: 'center' }} gutterBottom>
                                         {board.name}
                                         <Fab onClick={() => addBoardItem(boardIndex)} size="small" sx={{ mx: 2 }} color="primary" aria-label="add">
@@ -112,7 +151,11 @@ export default function Board() {
                                         {
                                             board.cards.map((card, cardIndex) => {
                                                 return (
-                                                    <BoardItem key={cardIndex} card={card} handleDelete={()=>deleteBoardItem(boardIndex,cardIndex)} />
+                                                    <BoardItem key={cardIndex} card={card}
+                                                        handleVoteClick={(vote) => handleVoteUpdate(boardIndex, cardIndex, vote)}
+                                                        handleDelete={() => deleteBoardItem(boardIndex, cardIndex)}
+                                                        userVote={getUserVoteOnCard(card)}
+                                                        handleEdit={() => editBoardItem(boardIndex, cardIndex)} />
                                                 )
                                             })
                                         }
@@ -125,7 +168,7 @@ export default function Board() {
                 <NewBoardItem open={openDialog}
                     cardData={dataToNewBoardItem}
                     handleClose={() => toggleDialog(false)}
-                    handleSave={(dataIn) => handleSaveBoardItem(dataIn)}/>
+                    handleSave={(dataIn) => handleSaveBoardItem(dataIn)} />
             </Container>
         </React.Fragment>
     )

@@ -25,7 +25,7 @@ export default function RetroTool() {
   return (
     <div>
       <RegisterUserDialog open={enableDialog} handleClose={() => setEnableDialog(false)} registrationCallback={registrationCallback} />
-      <Board />
+      <Board roomId={roomId}/>
     </div>
   )
 }

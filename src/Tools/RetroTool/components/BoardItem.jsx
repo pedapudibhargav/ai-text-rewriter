@@ -29,6 +29,11 @@ export default function BoardItem(props) {
         setEnableBottomNav(false);
     }
 
+    const handleVoteSelection = (vote) => {
+        props.handleVoteClick(vote);
+        handleClose();
+    }
+
     const getVotings = () => {
         // default votes
         const votesObj = {
@@ -49,9 +54,9 @@ export default function BoardItem(props) {
             Object.entries(votesObj).map(([key, value]) => {
                 return (
                     value ?
-                    <Badge badgeContent={value} key={key} color="primary" sx={{mx:0.5}}>
-                        <span style={{fontSize:'1.25rem'}}>{key}</span>
-                    </Badge> : null
+                        <Badge badgeContent={value} key={key} color="primary" sx={{ mx: 0.5 }}>
+                            <span style={{ fontSize: '1.25rem' }}>{key}</span>
+                        </Badge> : null
                 )
             })
         )
@@ -84,13 +89,23 @@ export default function BoardItem(props) {
                                 {
                                     votingOptions.map((option, index) => {
                                         return (
-                                            <MenuItem key={index} onClick={handleClose}>{option}</MenuItem>
+                                            <>
+                                                <MenuItem key={index} onClick={() => handleVoteSelection(option)}>
+                                                    {
+                                                        props.userVote && props.userVote === option ?
+                                                            <Badge badgeContent={'✓'} color="success">
+                                                                <span>{option}</span>
+                                                            </Badge> :
+                                                            option
+                                                    }
+                                                </MenuItem>
+                                            </>
                                         )
                                     })
                                 }
                             </Menu>
                             <BottomNavigationAction label="Delete" onClick={props.handleDelete} icon={<DeleteIcon />} />
-                            <BottomNavigationAction label="Edit" icon={<EditIcon />} />
+                            <BottomNavigationAction label="Edit" icon={<EditIcon />} onClick={props.handleEdit} />
                         </BottomNavigation>
                     </Paper>
                 </CardActions>

@@ -18,11 +18,13 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.10.0",
     "react-scripts": "5.0.1",
+    "socket.io": "^4.6.1",
+    "socket.io-client": "^4.6.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "REACT_APP_BACKEND_HOST=http://localhost:3002/api react-scripts start",
-    "build": "REACT_APP_BACKEND_HOST=https://api.appnirvana.co/api react-scripts build",
+    "start": "REACT_APP_BACKEND_HOST=http://localhost:3002/api WS_HOST=ws://localhost:3002 react-scripts start",
+    "build": "REACT_APP_BACKEND_HOST=https://api.appnirvana.co/api WS_HOST=ws://api.appnirvana.co react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "deploy": "npm run build && gh-pages -d build"
