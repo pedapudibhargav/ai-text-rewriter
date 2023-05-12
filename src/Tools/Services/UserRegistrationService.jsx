@@ -1,5 +1,6 @@
 const GetUserDetails = () => {
     let userDetails = localStorage.getItem('userDetails');
+    console.log('userDetails - GetUserDetails', userDetails);
     if (userDetails) {
         return JSON.parse(userDetails);
     } else {

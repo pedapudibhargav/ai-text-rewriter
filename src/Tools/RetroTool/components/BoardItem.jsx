@@ -89,17 +89,15 @@ export default function BoardItem(props) {
                                 {
                                     votingOptions.map((option, index) => {
                                         return (
-                                            <>
-                                                <MenuItem key={index} onClick={() => handleVoteSelection(option)}>
-                                                    {
-                                                        props.userVote && props.userVote === option ?
-                                                            <Badge badgeContent={'✓'} color="success">
-                                                                <span>{option}</span>
-                                                            </Badge> :
-                                                            option
-                                                    }
-                                                </MenuItem>
-                                            </>
+                                            <MenuItem key={index} onClick={() => handleVoteSelection(option)}>
+                                                {
+                                                    props.userVote && props.userVote === option ?
+                                                        <Badge badgeContent={'✓'} color="success">
+                                                            <span>{option}</span>
+                                                        </Badge> :
+                                                        option
+                                                }
+                                            </MenuItem>
                                         )
                                     })
                                 }

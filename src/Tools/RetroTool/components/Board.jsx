@@ -6,8 +6,9 @@ import AddIcon from '@mui/icons-material/Add';
 import BoardItem from './BoardItem';
 import NewBoardItem from './NewBoardItem';
 import BoardsTestData from './BoardsTestData';
-import { ConnectToRoomById } from '../../Services/RetroBoardServices';
+import { ConnectToRoomById, GetSocket } from '../../Services/RetroBoardServices';
 import { GetUserDetails } from '../../Services/UserRegistrationService';
+import { GetRandomNumberFromPSTTime } from '../../Services/RandomNumber';
 
 const newBoardItemDefault = {
     boardIndex: -1,
@@ -31,18 +32,19 @@ export default function Board(props) {
     const [dataToNewBoardItem, setDataToNewBoardItem] = useState(newBoardItemDefault);
     const voteOptions = ['👍', '👎', '🤐', '🤔'];
     const [currentUserDetails, setCurrentUserDetails] = useState(GetUserDetails());
-    const [retroBoardData, setRetroBoardData] = useState(BoardsTestData);
+    const [retroBoardData, setRetroBoardData] = useState({...BoardsTestData, roomId: ROOM_ID});
+    const [socket, setSocket] = useState(GetSocket());
 
     useEffect(() => {
         ConnectToRoomById(ROOM_ID);
-        if (!currentUserDetails || !currentUserDetails.username)
-            setCurrentUserDetails((previousState) => ({ ...previousState, username: `Anonymous${Math.floor(Math.random() * 100)}` }))
+        setCurrentUserDetails(GetUserDetails());
+        // if (!currentUserDetails || !currentUserDetails.username)
+        //     setCurrentUserDetails((previousState) => ({ ...previousState, username: `Anonymous${Math.floor(Math.random() * 100)}` }))
     }, []);
 
     const toggleDialog = (booleanFlag) => {
         setOpenDialog(booleanFlag);
     }
-
 
     const handleSaveBoardItem = (boardItem) => {
         console.log('boardItem:', boardItem);
@@ -59,7 +61,7 @@ export default function Board(props) {
         if (boardItem.cardIndex === -1) {
             // new card
             const newCard = { ...defaultCardValues };
-            newCard['id'] = boardToBeUpdated['cards'].length + 1;
+            newCard['id'] = GetRandomNumberFromPSTTime();
             newCard['content'] = boardItem['content'];
             updatedBoardData.boards[boardIndexIn]['cards'].push(newCard);
         } else {
@@ -72,6 +74,7 @@ export default function Board(props) {
             updatedBoardData.boards[boardIndexIn]['cards'][boardItem.cardIndex] = cardToBeUpdated;
         }
         setRetroBoardData(updatedBoardData);
+        socket.emit('board-update', updatedBoardData);
         toggleDialog(false);
     }
 
@@ -101,10 +104,11 @@ export default function Board(props) {
         const updatedBoardData = { ...retroBoardData };
         updatedBoardData.boards[boardIndex]['cards'].splice(cardIndex, 1);
         setRetroBoardData(updatedBoardData);
+        socket.emit('board-update', updatedBoardData);
     }
 
     const handleVoteUpdate = (boardIndex, cardIndex, vote) => {
-        const username = currentUserDetails.username;
+        const username = currentUserDetails.userName;
         const updatedBoardData = { ...retroBoardData };
         const board = updatedBoardData.boards[boardIndex];
         const card = board.cards[cardIndex];
@@ -117,14 +121,14 @@ export default function Board(props) {
             // User is submitting a new vote
             card.votes.push({ voter: username, vote: vote });
         }
-
         // Assign the updated card with votes back into BoardsTestData
         updatedBoardData.boards[boardIndex].cards[cardIndex] = card;
         setRetroBoardData(updatedBoardData);
+        socket.emit('board-update', updatedBoardData);
     };
 
     const getUserVoteOnCard = (card) => {
-        const usernameIn = currentUserDetails.username;
+        const usernameIn = currentUserDetails.userName;
         const voteIndex = card.votes.findIndex((v) => v.voter === usernameIn);
         if (voteIndex !== -1) {
             return card.votes[voteIndex].vote;
@@ -132,12 +136,18 @@ export default function Board(props) {
         return null;
     };
 
+
+    socket.on('board-update', (updatedBoard) => {
+        setRetroBoardData(updatedBoard);
+    });
+
     return (
         <React.Fragment>
             <CssBaseline />
             <Container maxWidth="false">
+                <p>{'currentuser:'+currentUserDetails.userName}</p>
                 <Grid container spacing={2} sx={{ my: 2 }}>
-                    {
+                    {                        
                         retroBoardData.boards.map((board, boardIndex) => {
                             return (
                                 <Grid key={boardIndex} item xs={12 / retroBoardData.boards.length}>

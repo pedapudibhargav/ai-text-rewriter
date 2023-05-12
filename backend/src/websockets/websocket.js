@@ -10,6 +10,7 @@ const webSocketServer = (app, allowedOrigins) => {
     });
     const rooms = new Map();
 
+
     io.on("connection", (socket) => {
         console.log("New client connected");
         socket.on('joinRoom', (roomId) => {
@@ -29,6 +30,15 @@ const webSocketServer = (app, allowedOrigins) => {
             // Emit a custom event to acknowledge successful room connection
             socket.emit('roomConnected', roomId);
         });
+
+
+        socket.on('board-update', (roomDetails) => {
+            console.log('board-update', roomDetails.roomId);
+            // Handle the vote details here
+            // Forward the details to other clients in the same room
+            socket.to(roomDetails.roomId).emit('board-update', roomDetails);
+        });
+
 
         socket.on('disconnect', () => {
             // Remove the client from the room when disconnected

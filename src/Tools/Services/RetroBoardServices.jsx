@@ -10,12 +10,11 @@ const Options =  {
 let socket = null;
 
 const OpenSocket = () => {
-    console.log('socket:', socket);
-    const socketURL = `${WebSocketURL}`;
-    console.log('socketURL', socketURL);
-    if(socket === null)
+    if(socket === null) {
+        const socketURL = `${WebSocketURL}`;
         socket = io(socketURL, Options);
-    console.log('--- opened socket:', socket);
+    }        
+    return socket;
 };
 
 const ConnectToRoomById = (roomId) => {
@@ -24,8 +23,11 @@ const ConnectToRoomById = (roomId) => {
         alert(`Sorry we ran into an issue. Please try again later.\nError: roomId is not defined`);
         return console.error('roomId is not defined');
     }
-    console.log('--- roomId:', roomId);
     socket.emit('joinRoom', roomId);
 };
 
-export { ConnectToRoomById};
+const GetSocket = () => {
+    return OpenSocket();
+}
+
+export { ConnectToRoomById, GetSocket};
