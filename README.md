@@ -1,8 +1,7 @@
 
 # Backend Setup
 In the project directory, you can run:
-### `cd backend/src`
-### `node index.js`
+### `npm start`
 This will start an instance over port 3002
 
 ---------------------------------------------------------------------------------------------------

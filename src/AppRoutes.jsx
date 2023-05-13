@@ -1,5 +1,4 @@
 import * as React from 'react';
-import ResponsiveAppBar from './Tools/TeamMoodTracker/ResponsiveAppBar'
 import { Container } from '@mui/material'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import BeginMoodCheckIn from './Tools/TeamMoodTracker/BeginMoodCheckIn'
@@ -13,6 +12,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Home from './Home';
 import Teams from './Tools/TeamMoodTracker/Components/Teams/Teams';
 import TeamSurvey from './Tools/TeamSurvey/TeamSurvey';
+import ResponsiveAppBar from './Tools/CommonComponents/ResponsiveAppBar/ResponsiveAppBar';
 
 export default function AppRoutes() {
     const [currentTheme, setCurrentTheme] = React.useState('light');
@@ -41,7 +41,7 @@ export default function AppRoutes() {
                             <Route path="/moodchecker/:testId" element={<MoodTest />} />
                             <Route path="/moodchecker/results/:testId" element={<MoodTestResults />} />
                             <Route path="/moodchecker/thankyou/:testId" element={<ThankYou />} />
-                            <Route path="/retrotool" element={<RetroTool />} />
+                            <Route path="/retrotool/:roomId" element={<RetroTool />} />
                             <Route path="/teamsurvey" element={<TeamSurvey />} />
                         </Routes>
                     </BrowserRouter>

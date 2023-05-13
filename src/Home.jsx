@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
     Grid, Paper, Typography, Card, CardContent
     , CardActions, Button, CardMedia, CardActionArea, Container
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { GetRandomNumberFromPSTTime } from './Tools/Services/RandomNumber';
 import moodTrackerCardImage from './images/moodtracker_card.jpg';
 import retroToolCardImage from './images/retro_card.jpg';
 import teamsurveyToolCardImage from './images/teamsurvey.jpg';
@@ -11,6 +12,7 @@ import teamsurveyToolCardImage from './images/teamsurvey.jpg';
 
 export default function Home() {
     const navigate = useNavigate();
+    // add :randomNum to replace it with random number.
     const apps = [
         {
             name: 'Team Mood Tracker',
@@ -21,7 +23,7 @@ export default function Home() {
         {
             name: 'Retro Tool - Coming Soon',
             description: "Streamline retrospectives, capture valuable feedback, and drive actionable improvements with our intuitive Retro Tool.",
-            link: '/retrotool',
+            link: '/retrotool/:randomNum',
             imagePath: retroToolCardImage
         },
         {
@@ -32,7 +34,12 @@ export default function Home() {
         }
     ];
 
+    const handleRandomNumInLinks = (linkIn) => {
+        return linkIn.replace(':randomNum', GetRandomNumberFromPSTTime());
+    };
+
     const handleCTAClick = (link) => {
+        link = handleRandomNumInLinks(link);
         navigate(link, { state: { from: `/home` } });
     }
 
@@ -45,12 +52,12 @@ export default function Home() {
         <>
             <Container fixed sx={{ mt: 4 }}>
                 <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-                    {apps.map((app) => {
+                    {apps.map((app, index) => {
                         return (
-                            <Grid item xs={4}>
+                            <Grid item xs={4} key={index}>
                                 <Paper elevation={1}>
                                     <Card>
-                                        <CardActionArea onClick={()=>handleCTAClick(app.link)}>
+                                        <CardActionArea onClick={() => handleCTAClick(app.link)}>
                                             <CardMedia
                                                 component="img"
                                                 height="240"
@@ -67,7 +74,7 @@ export default function Home() {
                                             </CardContent>
                                         </CardActionArea>
                                         <CardActions>
-                                            <Button size="small" color="primary" onClick={()=>handleCTAClick(app.link)}>
+                                            <Button size="small" color="primary" onClick={() => handleCTAClick(app.link)}>
                                                 Get Started
                                             </Button>
                                         </CardActions>
