@@ -17,17 +17,14 @@ const OpenSocket = () => {
     return socket;
 };
 
-const ConnectToRoomById = (roomId) => {
-    OpenSocket();
+const ConnectToRoomById = (roomId, callback) => {
+    if(socket === null || !socket)
+        OpenSocket();
     if(!roomId) {
         alert(`Sorry we ran into an issue. Please try again later.\nError: roomId is not defined`);
         return console.error('roomId is not defined');
     }
-    socket.emit('joinRoom', roomId);
+    socket.emit('joinRoom', roomId, callback);
 };
 
-const GetSocket = () => {
-    return OpenSocket();
-}
-
-export { ConnectToRoomById, GetSocket};
+export { ConnectToRoomById, OpenSocket};

@@ -7,15 +7,11 @@ export default function NewBoardItem(props) {
     const [cardData, setCardData] = useState(props.cardData);
 
     const handleContentChange = (event) => {
-        setCardData(prevCardData => ({
-            ...prevCardData,
+        setCardData({
+            ...props.cardData,
             content: event.target.value
-        }));
+        });
     };
-
-    useEffect(() => {
-        setCardData(props.cardData);
-    }, [props.cardData]);
 
     const handleSave = () => {
         props.handleSave(cardData);
@@ -25,16 +21,14 @@ export default function NewBoardItem(props) {
         <>
             <Dialog open={props.open} onClose={props.handleClose} fullWidth>
                 <DialogContent>
-                    <DialogContentText>
-                        <TextField
-                            label="Content"
-                            multiline
-                            rows={6}
-                            fullWidth
-                            defaultValue={cardData.content ? cardData.content : ''}
-                            onChange={(e) => handleContentChange(e)}
-                        />
-                    </DialogContentText>
+                    <TextField
+                        label="Content"
+                        multiline
+                        rows={6}
+                        fullWidth
+                        defaultValue={props.cardData.content ? props.cardData.content : ''}
+                        onChange={(e) => handleContentChange(e)}
+                    />
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={props.handleClose}>Cancel</Button>

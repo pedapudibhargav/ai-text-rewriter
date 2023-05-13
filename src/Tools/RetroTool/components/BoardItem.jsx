@@ -76,7 +76,7 @@ export default function BoardItem(props) {
                 </CardContent>
                 <CardActions sx={{ position: 'relative' }}>
                     <Paper sx={{ position: 'absolute', zIndex: 2, bottom: 0, left: 0, right: 0, opacity: enableBottomNav ? 1 : 0 }} elevation={3}>
-                        <BottomNavigation showLabels sx={{ width: '100%' }}>
+                        <BottomNavigation showlabels o sx={{ width: '100%' }}>
                             <BottomNavigationAction id="btn-vote" label="Vote" icon={<ThumbsUpDownIcon />}
                                 aria-controls={open ? 'basic-menu' : undefined} aria-haspopup="true" aria-expanded={open ? 'true' : undefined}
                                 onClick={handleClick} />

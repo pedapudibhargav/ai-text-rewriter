@@ -9,11 +9,24 @@ const webSocketServer = (app, allowedOrigins) => {
         }
     });
     const rooms = new Map();
+    let roomsData = {};
 
+    const manageRoomsSize = () => {
+        const maxRoomSize = 100;
+        const roomKeys = Object.keys(roomsData);
+        if (roomKeys.size > maxRoomSize) {
+            const numberOfRoomsToRemove = roomKeys.size - maxRoomSize;
+            for (let i = 0; i < numberOfRoomsToRemove; i++) {
+                const roomToRemove = roomKeys[i];
+                console.log('Removing room:', roomKeys[i]);
+                delete roomsData[roomToRemove];
+            }
+        }
+    };
 
     io.on("connection", (socket) => {
         console.log("New client connected");
-        socket.on('joinRoom', (roomId) => {
+        socket.on('joinRoom', (roomId, callback) => {
             console.log('joinRoom', roomId);
             let room = rooms.get(roomId);
 
@@ -21,6 +34,7 @@ const webSocketServer = (app, allowedOrigins) => {
                 // Create a new room if it doesn't exist
                 room = { id: roomId, clients: new Set() };
                 rooms.set(roomId, room);
+                manageRoomsSize();
             }
 
             // Join the room
@@ -29,6 +43,11 @@ const webSocketServer = (app, allowedOrigins) => {
 
             // Emit a custom event to acknowledge successful room connection
             socket.emit('roomConnected', roomId);
+
+            // Trigger the callback function if provided
+            if (callback && typeof callback === 'function') {
+                callback(roomsData[roomId]);
+            }
         });
 
 
@@ -37,6 +56,7 @@ const webSocketServer = (app, allowedOrigins) => {
             // Handle the vote details here
             // Forward the details to other clients in the same room
             socket.to(roomDetails.roomId).emit('board-update', roomDetails);
+            roomsData[roomDetails.roomId] = roomDetails;
         });
 
 

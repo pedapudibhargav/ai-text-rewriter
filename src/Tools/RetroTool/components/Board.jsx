@@ -5,10 +5,11 @@ import {
 import AddIcon from '@mui/icons-material/Add';
 import BoardItem from './BoardItem';
 import NewBoardItem from './NewBoardItem';
-import BoardsTestData from './BoardsTestData';
-import { ConnectToRoomById, GetSocket } from '../../Services/RetroBoardServices';
+import { NewRetroBoardData } from './BoardsTestData';
+import { ConnectToRoomById, OpenSocket } from '../../Services/RetroBoardServices';
 import { GetUserDetails } from '../../Services/UserRegistrationService';
 import { GetRandomNumberFromPSTTime } from '../../Services/RandomNumber';
+import CallMadeIcon from '@mui/icons-material/CallMade';
 
 const newBoardItemDefault = {
     boardIndex: -1,
@@ -19,24 +20,25 @@ const defaultCardValues = {
     id: 11,
     content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
     isVoteRequired: true,
-    votes: [
-        {
-            'voter': 'user1',
-            'vote': '👍'
-        }
-    ]
+    votes: []
 }
+
+const boardStyles = {
+    minHeight: '80vh',
+    my: 2
+}
+
 export default function Board(props) {
     const ROOM_ID = props.roomId;
     const [openDialog, setOpenDialog] = useState(false);
     const [dataToNewBoardItem, setDataToNewBoardItem] = useState(newBoardItemDefault);
-    const voteOptions = ['👍', '👎', '🤐', '🤔'];
     const [currentUserDetails, setCurrentUserDetails] = useState(GetUserDetails());
-    const [retroBoardData, setRetroBoardData] = useState({...BoardsTestData, roomId: ROOM_ID});
-    const [socket, setSocket] = useState(GetSocket());
+    const [retroBoardData, setRetroBoardData] = useState({ ...NewRetroBoardData, roomId: ROOM_ID });
+    const [socket, setSocket] = useState(OpenSocket());
+
 
     useEffect(() => {
-        ConnectToRoomById(ROOM_ID);
+        ConnectToRoomById(ROOM_ID, socketPostRoomJoin);
         setCurrentUserDetails(GetUserDetails());
         // if (!currentUserDetails || !currentUserDetails.username)
         //     setCurrentUserDetails((previousState) => ({ ...previousState, username: `Anonymous${Math.floor(Math.random() * 100)}` }))
@@ -47,7 +49,6 @@ export default function Board(props) {
     }
 
     const handleSaveBoardItem = (boardItem) => {
-        console.log('boardItem:', boardItem);
         if (!boardItem || boardItem.boardIndex === undefined) {
             console.error('Board item or boardIndex is not defined');
             return alert("Sorry it's not you, it'us");
@@ -79,7 +80,6 @@ export default function Board(props) {
     }
 
     const addBoardItem = (boardIndex) => {
-        console.log('boardIndex:', boardIndex);
         setDataToNewBoardItem({
             boardIndex: boardIndex,
             cardIndex: -1,
@@ -136,6 +136,11 @@ export default function Board(props) {
         return null;
     };
 
+    const socketPostRoomJoin = (boardDataFromRoom) => {
+        if(boardDataFromRoom && boardDataFromRoom.boards && boardDataFromRoom.boards.length > 0){
+            setRetroBoardData(boardDataFromRoom);
+        }
+    };
 
     socket.on('board-update', (updatedBoard) => {
         setRetroBoardData(updatedBoard);
@@ -145,12 +150,11 @@ export default function Board(props) {
         <React.Fragment>
             <CssBaseline />
             <Container maxWidth="false">
-                <p>{'currentuser:'+currentUserDetails.userName}</p>
-                <Grid container spacing={2} sx={{ my: 2 }}>
-                    {                        
+                <Grid container spacing={2} sx={boardStyles}>
+                    {
                         retroBoardData.boards.map((board, boardIndex) => {
                             return (
-                                <Grid key={boardIndex} item xs={12 / retroBoardData.boards.length}>
+                                <Grid key={boardIndex} item sx={{ borderRight: '1px dashed #afd2f3', pr:2 }} xs={12 / retroBoardData.boards.length}>
                                     <Typography variant="h5" sx={{ textAlign: 'center' }} gutterBottom>
                                         {board.name}
                                         <Fab onClick={() => addBoardItem(boardIndex)} size="small" sx={{ mx: 2 }} color="primary" aria-label="add">
@@ -159,15 +163,25 @@ export default function Board(props) {
                                     </Typography>
                                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
                                         {
-                                            board.cards.map((card, cardIndex) => {
-                                                return (
-                                                    <BoardItem key={cardIndex} card={card}
-                                                        handleVoteClick={(vote) => handleVoteUpdate(boardIndex, cardIndex, vote)}
-                                                        handleDelete={() => deleteBoardItem(boardIndex, cardIndex)}
-                                                        userVote={getUserVoteOnCard(card)}
-                                                        handleEdit={() => editBoardItem(boardIndex, cardIndex)} />
-                                                )
-                                            })
+                                            (board && board.cards && board.cards.length > 0) ?
+                                                <>
+                                                    {board.cards.map((card, cardIndex) => {
+                                                        return (
+                                                            <BoardItem key={cardIndex} card={card}
+                                                                handleVoteClick={(vote) => handleVoteUpdate(boardIndex, cardIndex, vote)}
+                                                                handleDelete={() => deleteBoardItem(boardIndex, cardIndex)}
+                                                                userVote={getUserVoteOnCard(card)}
+                                                                handleEdit={() => editBoardItem(boardIndex, cardIndex)} />
+                                                        )
+                                                    })
+                                                    }
+                                                </> :
+                                                <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent:'center', alignItems:'center', p:2, mt:6, opacity:0.3}}>
+                                                    <CallMadeIcon sx={{fontSize:'6rem'}}/>
+                                                    <Typography variant="body1" sx={{ textAlign: 'center' }} gutterBottom>
+                                                        This board is craving your brilliant ideas. Feed it with a new item!
+                                                    </Typography>
+                                                </Box>
                                         }
                                     </Box>
                                 </Grid>

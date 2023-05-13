@@ -72,4 +72,31 @@ const BoardsTestData = {
         }
     ]
 };
-export default BoardsTestData;
+
+const NewRetroBoardData = {
+    id: 1,
+    organizerEmail: 'default@default.com',
+    dateCreated: '2021-07-24T18:25:43.511Z',
+    parcipants: [],
+    viewers: [],
+    boards: [
+        {
+            id: 1,
+            name: 'Went Well',
+            cards: []
+        },
+        {
+            id: 2,
+            name: 'To Improve',
+            cards: []
+        },
+        {
+            id: 3,
+            name: 'Action Items',
+            cards: []
+        }
+    ]
+};
+
+
+export { BoardsTestData, NewRetroBoardData };
