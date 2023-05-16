@@ -1,9 +1,9 @@
 
 const BoardsTestData = {
     id: 1,
-    organizerEmail: 'default@default.com',
+    organizer: {},
     dateCreated: '2021-07-24T18:25:43.511Z',
-    parcipants: [],
+    participants: [],
     viewers: [],
     boards: [
         {
@@ -75,9 +75,12 @@ const BoardsTestData = {
 
 const NewRetroBoardData = {
     id: 1,
-    organizerEmail: 'default@default.com',
+    organizer: {
+        email:'',
+        username: ''
+    },
     dateCreated: '2021-07-24T18:25:43.511Z',
-    parcipants: [],
+    participants: [],
     viewers: [],
     boards: [
         {

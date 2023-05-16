@@ -13,9 +13,13 @@ import Home from './Home';
 import Teams from './Tools/TeamMoodTracker/Components/Teams/Teams';
 import TeamSurvey from './Tools/TeamSurvey/TeamSurvey';
 import ResponsiveAppBar from './Tools/CommonComponents/ResponsiveAppBar/ResponsiveAppBar';
+import RegisterUserDialog from './Tools/CommonComponents/RegisterUserDialog';
+import { GetUserDetails } from './Tools/Services/UserRegistrationService';
 
 export default function AppRoutes() {
     const [currentTheme, setCurrentTheme] = React.useState('light');
+    const [currentUserDetails, setCurrentUserDetails] = React.useState(GetUserDetails());
+    const [enableDialog, setEnableDialog] = React.useState(!currentUserDetails);
     const darkTheme = createTheme({
         palette: {
             mode: currentTheme,
@@ -30,22 +34,23 @@ export default function AppRoutes() {
         <>
             <ThemeProvider theme={darkTheme}>
                 <CssBaseline />
-                <ResponsiveAppBar onThemeChange={toggleTheme} isCurrentThemeDark={currentTheme === 'dark'}/>
+                <ResponsiveAppBar onThemeChange={toggleTheme} isCurrentThemeDark={currentTheme === 'dark'} currentUserDetails={currentUserDetails} />
                 <Container maxWidth="lg">
                     <BrowserRouter>
                         <Routes>
                             <Route path="/" element={<Home />} />
-                            <Route path="/newuser" element={<NewUser />} />                            
+                            <Route path="/newuser" element={<NewUser />} />
                             <Route path="/moodchecker" element={<BeginMoodCheckIn />} />
                             <Route path="/moodchecker/teams" element={<Teams />} />
                             <Route path="/moodchecker/:testId" element={<MoodTest />} />
                             <Route path="/moodchecker/results/:testId" element={<MoodTestResults />} />
                             <Route path="/moodchecker/thankyou/:testId" element={<ThankYou />} />
-                            <Route path="/retrotool/:roomId" element={<RetroTool />} />
+                            <Route path="/retrotool/:roomId" element={<RetroTool currentUserDetails={currentUserDetails} />} />
                             <Route path="/teamsurvey" element={<TeamSurvey />} />
                         </Routes>
                     </BrowserRouter>
                 </Container>
+                <RegisterUserDialog open={enableDialog} handleClose={() => setEnableDialog(false)} registrationCallback={setCurrentUserDetails} />
             </ThemeProvider>
         </>
     )

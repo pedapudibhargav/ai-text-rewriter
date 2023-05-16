@@ -22,7 +22,7 @@ export default function NewBoardItem(props) {
             <Dialog open={props.open} onClose={props.handleClose} fullWidth>
                 <DialogContent>
                     <TextField
-                        label="Content"
+                        label="Ticket Descriiption"
                         multiline
                         rows={6}
                         fullWidth
