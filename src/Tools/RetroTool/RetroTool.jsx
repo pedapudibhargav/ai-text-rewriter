@@ -1,13 +1,17 @@
 import React from 'react'
 import Board from './components/Board'
 import { useParams } from "react-router-dom";
-import RegisterUserDialog from '../CommonComponents/RegisterUserDialog';
-import { GetUserDetails } from '../Services/UserRegistrationService';
 
-export default function RetroTool() {
+export default function RetroTool(props) {
   const { roomId } = useParams();
 
   return (
-    <Board roomId={roomId} />
+    <>
+      {
+        props.currentUserDetails ?
+          <Board roomId={roomId} currentUserDetails={props.currentUserDetails} /> :
+          null
+      }
+    </>
   )
 }

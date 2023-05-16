@@ -15,10 +15,10 @@ export default function RegisterUserDialog(props) {
     }, [formData]);
 
     const isFormDataValid = () => {
-        if (!formData.firstName || formData.firstName.trim().length === 0)
-            return false;
-        if (!formData.lastName || formData.lastName.trim().length === 0)
-            return false;
+        // if (!formData.firstName || formData.firstName.trim().length === 0)
+        //     return false;
+        // if (!formData.lastName || formData.lastName.trim().length === 0)
+        //     return false;
         if (!formData.userName || formData.userName.trim().length === 0)
             return false;
         if (!formData.email || formData.email.trim().length === 0)
@@ -38,10 +38,10 @@ export default function RegisterUserDialog(props) {
     };
 
     const handleInputChange = (e) => {
-        const inputName = e.target.name;
+        // const inputName = e.target.name;
         let inputValue = e.target.value;
 
-        if(e.target.name === 'userName' && e.target.value.length > 0) {
+        if (e.target.name === 'userName' && e.target.value.length > 0) {
             // remove all spaces
             inputValue = inputValue.replace(/\s/g, '').trim();
         }
@@ -57,40 +57,41 @@ export default function RegisterUserDialog(props) {
 
     return (
         <>
-            <Dialog open={props.open} onClose={props.handleClose}>
+            <Dialog open={props.open} onClose={props.handleClose} fullWidth={true}>
                 <DialogTitle>
-                    <Box sx={{display: 'flex', flexDirection: 'row'}}>
-                        <Box sx={{flexGrow: 1}}>Sign Up</Box>
-                        <Avatar alt="Remy Sharp"  sx={{ width: 90, height: 90, marginBottom:-20 }} src={avatar} />
+                    <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+                        <Box sx={{ flexGrow: 1 }}>Sign Up</Box>
+                        <Avatar alt="Remy Sharp" sx={{ width: 90, height: 90, marginBottom: -20 }} src={avatar} />
                     </Box>
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText>
                         <Typography variant="p" gutterBottom>
-                            We just need your email, first name, last name that's it!
+                            We just need your email, username that's it!
                         </Typography>
                         {
                             (isFormValid !== null && isFormValid === false) ?
-                            <Alert severity="error">Please fill out the mandator fields: first name, last name, email and username</Alert> : null
-                        }                                                
+                                <Alert severity="error">Please fill out the mandator fields: first name, last name, email and username</Alert> : null
+                        }
                     </DialogContentText>
                     <form onSubmit={handleSubmit}>
                         <Grid container spacing={2}>
-                            <Grid item xs={6}>
+                            <Grid item xs={12}>
                                 <TextField autoFocus margin="dense" label="User Name" required
                                     type="text" fullWidth variant="standard" name='userName' onChange={handleInputChange}
                                 />
                             </Grid>
-                            <Grid item xs={6}>
+                            <Grid item xs={12}>
                                 <TextField autoFocus margin="dense"
                                     label="Email Address"
                                     type="email"
                                     fullWidth
+                                    required
                                     variant="standard"
                                     name='email' onChange={handleInputChange}
                                 />
                             </Grid>
-                            <Grid item xs={6}>
+                            {/* <Grid item xs={6}>
                                 <TextField autoFocus margin="dense" label="Firat Name" required
                                     type="text" fullWidth variant="standard" name='firstName' onChange={handleInputChange}
                                 />
@@ -99,14 +100,14 @@ export default function RegisterUserDialog(props) {
                                 <TextField autoFocus margin="dense" label="Last Name"
                                     type="text" fullWidth variant="standard" name='lastName' onChange={handleInputChange}
                                 />
-                            </Grid>
+                            </Grid> */}
 
                         </Grid>
                     </form>
                 </DialogContent>
-                <DialogActions>
+                <DialogActions sx={{ p: 2 }}>
                     <Button onClick={props.handleClose}>Cancel</Button>
-                    <Button onClick={handleSubmit}>Subscribe</Button>
+                    <Button onClick={handleSubmit} variant="contained">Get Started 🏁</Button>
                 </DialogActions>
             </Dialog>
         </>

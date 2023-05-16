@@ -10,6 +10,7 @@ import { ConnectToRoomById, OpenSocket } from '../../Services/RetroBoardServices
 import { GetUserDetails } from '../../Services/UserRegistrationService';
 import { GetRandomNumberFromPSTTime } from '../../Services/RandomNumber';
 import CallMadeIcon from '@mui/icons-material/CallMade';
+import RetroAppBar from './RetroAppBar/RetroAppBar';
 
 const newBoardItemDefault = {
     boardIndex: -1,
@@ -32,16 +33,44 @@ export default function Board(props) {
     const ROOM_ID = props.roomId;
     const [openDialog, setOpenDialog] = useState(false);
     const [dataToNewBoardItem, setDataToNewBoardItem] = useState(newBoardItemDefault);
-    const [currentUserDetails, setCurrentUserDetails] = useState(GetUserDetails());
     const [retroBoardData, setRetroBoardData] = useState({ ...NewRetroBoardData, roomId: ROOM_ID });
     const [socket, setSocket] = useState(OpenSocket());
 
 
+    const socketPostRoomJoin = (boardDataFromRoom) => {
+        const userDetails = {
+            email: props.currentUserDetails.email,
+            username: props.currentUserDetails.userName
+        }
+        // set organizer
+        if (!boardDataFromRoom || !boardDataFromRoom.boards || !boardDataFromRoom.organizer || boardDataFromRoom.organizer.email === "") {
+            boardDataFromRoom = { ...retroBoardData, organizer: userDetails };
+            socket.emit('board-update', boardDataFromRoom);
+        }
+
+        // participant
+        if (boardDataFromRoom && boardDataFromRoom.boards && boardDataFromRoom.boards.length > 0) {
+            let isAddedasParticipant = false
+            if (boardDataFromRoom.organizer.username !== userDetails.username) {
+                if (!boardDataFromRoom.participants)
+                    boardDataFromRoom.participants = [];
+                boardDataFromRoom.participants.forEach((particpant) => {
+                    if (particpant.username === userDetails.username)
+                        isAddedasParticipant = true;
+                }); 
+                if (!isAddedasParticipant) {
+                    console.log('... setting participant:', userDetails);
+                    boardDataFromRoom.participants.push(userDetails);
+                    socket.emit('board-update', retroBoardData);
+                }
+                socket.emit('board-update', boardDataFromRoom);
+            }
+        }
+        setRetroBoardData(boardDataFromRoom);
+    };
+
     useEffect(() => {
         ConnectToRoomById(ROOM_ID, socketPostRoomJoin);
-        setCurrentUserDetails(GetUserDetails());
-        // if (!currentUserDetails || !currentUserDetails.username)
-        //     setCurrentUserDetails((previousState) => ({ ...previousState, username: `Anonymous${Math.floor(Math.random() * 100)}` }))
     }, []);
 
     const toggleDialog = (booleanFlag) => {
@@ -108,7 +137,7 @@ export default function Board(props) {
     }
 
     const handleVoteUpdate = (boardIndex, cardIndex, vote) => {
-        const username = currentUserDetails.userName;
+        const username = props.currentUserDetails.userName;
         const updatedBoardData = { ...retroBoardData };
         const board = updatedBoardData.boards[boardIndex];
         const card = board.cards[cardIndex];
@@ -128,18 +157,12 @@ export default function Board(props) {
     };
 
     const getUserVoteOnCard = (card) => {
-        const usernameIn = currentUserDetails.userName;
+        const usernameIn = props.currentUserDetails.userName;
         const voteIndex = card.votes.findIndex((v) => v.voter === usernameIn);
         if (voteIndex !== -1) {
             return card.votes[voteIndex].vote;
         }
         return null;
-    };
-
-    const socketPostRoomJoin = (boardDataFromRoom) => {
-        if(boardDataFromRoom && boardDataFromRoom.boards && boardDataFromRoom.boards.length > 0){
-            setRetroBoardData(boardDataFromRoom);
-        }
     };
 
     socket.on('board-update', (updatedBoard) => {
@@ -149,12 +172,13 @@ export default function Board(props) {
     return (
         <React.Fragment>
             <CssBaseline />
+            <RetroAppBar participants={[retroBoardData.organizer, ...retroBoardData.participants]} />
             <Container maxWidth="false">
                 <Grid container spacing={2} sx={boardStyles}>
                     {
                         retroBoardData.boards.map((board, boardIndex) => {
                             return (
-                                <Grid key={boardIndex} item sx={{ borderRight: '1px dashed #afd2f3', pr:2 }} xs={12 / retroBoardData.boards.length}>
+                                <Grid key={boardIndex} item sx={{ borderRight: '1px dashed #afd2f3', pr: 2 }} xs={12 / retroBoardData.boards.length}>
                                     <Typography variant="h5" sx={{ textAlign: 'center' }} gutterBottom>
                                         {board.name}
                                         <Fab onClick={() => addBoardItem(boardIndex)} size="small" sx={{ mx: 2 }} color="primary" aria-label="add">
@@ -176,8 +200,8 @@ export default function Board(props) {
                                                     })
                                                     }
                                                 </> :
-                                                <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent:'center', alignItems:'center', p:2, mt:6, opacity:0.3}}>
-                                                    <CallMadeIcon sx={{fontSize:'6rem'}}/>
+                                                <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', p: 2, mt: 6, opacity: 0.3 }}>
+                                                    <CallMadeIcon sx={{ fontSize: '6rem' }} />
                                                     <Typography variant="body1" sx={{ textAlign: 'center' }} gutterBottom>
                                                         This board is craving your brilliant ideas. Feed it with a new item!
                                                     </Typography>
