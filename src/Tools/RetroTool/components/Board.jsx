@@ -57,9 +57,8 @@ export default function Board(props) {
                 boardDataFromRoom.participants.forEach((particpant) => {
                     if (particpant.username === userDetails.username)
                         isAddedasParticipant = true;
-                }); 
+                });
                 if (!isAddedasParticipant) {
-                    console.log('... setting participant:', userDetails);
                     boardDataFromRoom.participants.push(userDetails);
                     socket.emit('board-update', retroBoardData);
                 }
@@ -129,6 +128,7 @@ export default function Board(props) {
         toggleDialog(true);
     }
 
+
     const deleteBoardItem = (boardIndex, cardIndex) => {
         const updatedBoardData = { ...retroBoardData };
         updatedBoardData.boards[boardIndex]['cards'].splice(cardIndex, 1);
@@ -138,9 +138,10 @@ export default function Board(props) {
 
     const handleVoteUpdate = (boardIndex, cardIndex, vote) => {
         const username = props.currentUserDetails.userName;
-        const updatedBoardData = { ...retroBoardData };
-        const board = updatedBoardData.boards[boardIndex];
-        const card = board.cards[cardIndex];
+        // const updatedBoardData = { ...retroBoardData };
+        const updatedBoardData = JSON.parse(JSON.stringify(retroBoardData));
+        const board = { ...updatedBoardData.boards[boardIndex] };
+        const card = { ...board.cards[cardIndex] };
         const existingVoteIndex = card.votes.findIndex((v) => v.voter === username);
 
         if (existingVoteIndex !== -1) {
@@ -148,10 +149,10 @@ export default function Board(props) {
             card.votes[existingVoteIndex].vote = vote;
         } else {
             // User is submitting a new vote
-            card.votes.push({ voter: username, vote: vote });
+            card.votes[card.votes.length] = { voter: username, vote: vote };
         }
         // Assign the updated card with votes back into BoardsTestData
-        updatedBoardData.boards[boardIndex].cards[cardIndex] = card;
+        // updatedBoardData.boards[boardIndex].cards[cardIndex] = card;
         setRetroBoardData(updatedBoardData);
         socket.emit('board-update', updatedBoardData);
     };
