@@ -18,18 +18,21 @@ export default function Home() {
             name: 'Team Mood Tracker',
             description: "Gain real-time insights into your team's sentiment, enhance collaboration, and make informed decisions for optimized sprints.",
             link: '/moodchecker',
+            active: false,
             imagePath: moodTrackerCardImage
         },
         {
-            name: 'Retro Tool - Coming Soon',
+            name: 'Retro Tool',
             description: "Streamline retrospectives, capture valuable feedback, and drive actionable improvements with our intuitive Retro Tool.",
             link: '/retrotool/:randomNum',
+            active: true,
             imagePath: retroToolCardImage
         },
         {
             name: 'Team Suvery - Coming Soon',
             description: "Know what your team is thinking and feeling with our Team Survey tool. Ask the right questions, get the right answers.",
             link: '/teamsurvey',
+            active: false,
             imagePath: teamsurveyToolCardImage
         }
     ];
@@ -52,7 +55,7 @@ export default function Home() {
         <>
             <Container fixed sx={{ mt: 4 }}>
                 <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-                    {apps.map((app, index) => {
+                    {apps.filter(app => app.active).map((app, index) => {
                         return (
                             <Grid item xs={4} key={index}>
                                 <Paper elevation={1}>

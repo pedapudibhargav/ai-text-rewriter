@@ -11,7 +11,7 @@ import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
-import LogoImg from '../images/mindTune-min.png';
+import LogoImg from '../images/appnirvana_white.png';
 import './ResponsiveAppBar.css';
 import { Switch } from '@mui/material';
 
@@ -51,26 +51,7 @@ function ResponsiveAppBar(props) {
             <AppBar position="static">
               <Container maxWidth="xl">
                 <Toolbar disableGutters>
-                  <img src={LogoImg} className='logo-img' alt="mind tune logo" />
-                  <Typography
-                    variant="h6"
-                    noWrap
-                    component="a"
-                    href="/"
-                    sx={{
-                      mr: 2,
-                      ml: 1,
-                      fontSize: '1.5rem',
-                      display: { xs: 'none', md: 'flex' },
-                      fontWeight: 700,
-                      letterSpacing: '.3rem',
-                      color: 'inherit',
-                      textDecoration: 'none',
-                    }}
-                  >
-                    MindTune
-                  </Typography>
-
+                  <img src={LogoImg} className='logo-img' alt="mind tune logo" />                  
                   <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
                     <IconButton
                       size="large"
