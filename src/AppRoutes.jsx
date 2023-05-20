@@ -1,20 +1,15 @@
 import * as React from 'react';
 import { Container } from '@mui/material'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import BeginMoodCheckIn from './Tools/TeamMoodTracker/BeginMoodCheckIn'
-import NewUser from './Tools/TeamMoodTracker/NewUser'
-import { MoodTest } from './Tools/TeamMoodTracker/TeamMoodTracker'
-import MoodTestResults from './Tools/TeamMoodTracker/MoodTestResults'
-import ThankYou from './Tools/TeamMoodTracker/Components/ThankYou'
 import RetroTool from './Tools/RetroTool/RetroTool'
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import Home from './Home';
-import Teams from './Tools/TeamMoodTracker/Components/Teams/Teams';
 import TeamSurvey from './Tools/TeamSurvey/TeamSurvey';
 import ResponsiveAppBar from './Tools/CommonComponents/ResponsiveAppBar/ResponsiveAppBar';
-import RegisterUserDialog from './Tools/CommonComponents/RegisterUserDialog';
+import { RegisterUserDialog } from './Tools/CommonComponents/RegisterUserDialog';
 import { GetUserDetails } from './Tools/Services/UserRegistrationService';
+import Moodsurvey from './Tools/Moodsurvey/Moodsurvey';
 
 export default function AppRoutes() {
     const [currentTheme, setCurrentTheme] = React.useState('light');
@@ -39,12 +34,7 @@ export default function AppRoutes() {
                     <BrowserRouter>
                         <Routes>
                             <Route path="/" element={<Home />} />
-                            <Route path="/newuser" element={<NewUser />} />
-                            <Route path="/moodchecker" element={<BeginMoodCheckIn />} />
-                            <Route path="/moodchecker/teams" element={<Teams />} />
-                            <Route path="/moodchecker/:testId" element={<MoodTest />} />
-                            <Route path="/moodchecker/results/:testId" element={<MoodTestResults />} />
-                            <Route path="/moodchecker/thankyou/:testId" element={<ThankYou />} />
+                            <Route path="/moodsurvey/:roomId" element={<Moodsurvey currentUserDetails={currentUserDetails} />}></Route>
                             <Route path="/retrotool/:roomId" element={<RetroTool currentUserDetails={currentUserDetails} />} />
                             <Route path="/teamsurvey" element={<TeamSurvey />} />
                         </Routes>

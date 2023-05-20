@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import PasswordStrengthCheckerApp from './Tools/PasswordStrengthMeter/PasswordStrengthMeter';
-import TeamMoodTracker from './Tools/TeamMoodTracker/TeamMoodTracker';
 import reportWebVitals from './reportWebVitals';
 import { Container } from "@mui/material";
 import '@fontsource/roboto/300.css';

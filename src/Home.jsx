@@ -17,8 +17,8 @@ export default function Home() {
         {
             name: 'Team Mood Tracker',
             description: "Gain real-time insights into your team's sentiment, enhance collaboration, and make informed decisions for optimized sprints.",
-            link: '/moodchecker',
-            active: false,
+            link: '/moodsurvey/:randomNum',
+            active: true,
             imagePath: moodTrackerCardImage
         },
         {

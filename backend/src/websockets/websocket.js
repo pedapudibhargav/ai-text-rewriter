@@ -9,17 +9,19 @@ const webSocketServer = (app, allowedOrigins) => {
         }
     });
     const rooms = new Map();
-    let roomsData = {};
+    const moodsurveyRooms = new Map();
+    let retroRoomsData = {};
+    let moodsurveyRoomsData = {};
 
-    const manageRoomsSize = () => {
+    const manageRoomsSize = (roomsDataIn) => {
         const maxRoomSize = 100;
-        const roomKeys = Object.keys(roomsData);
+        const roomKeys = Object.keys(roomsDataIn);
         if (roomKeys.size > maxRoomSize) {
             const numberOfRoomsToRemove = roomKeys.size - maxRoomSize;
             for (let i = 0; i < numberOfRoomsToRemove; i++) {
                 const roomToRemove = roomKeys[i];
                 console.log('Removing room:', roomKeys[i]);
-                delete roomsData[roomToRemove];
+                delete roomsDataIn[roomToRemove];
             }
         }
     };
@@ -34,7 +36,7 @@ const webSocketServer = (app, allowedOrigins) => {
                 // Create a new room if it doesn't exist
                 room = { id: roomId, clients: new Set() };
                 rooms.set(roomId, room);
-                manageRoomsSize();
+                manageRoomsSize(retroRoomsData);
             }
 
             // Join the room
@@ -46,7 +48,32 @@ const webSocketServer = (app, allowedOrigins) => {
 
             // Trigger the callback function if provided
             if (callback && typeof callback === 'function') {
-                callback(roomsData[roomId]);
+                callback(retroRoomsData[roomId]);
+            }
+        });
+
+        socket.on('join-moodsuervey-room', (roomId, callback) => {
+            console.log('join-moodsuervey-room', roomId);
+            let room = rooms.get(roomId);
+            console.log('before \n' + JSON.stringify(rooms) + '\n');
+            if (!room) {
+                // Create a new room if it doesn't exist
+                room = { id: roomId, clients: new Set() };
+                rooms.set(roomId, room);
+                console.log('\n after' + JSON.stringify(rooms) + '\n');
+                manageRoomsSize(moodsurveyRoomsData);
+            }
+
+            // Join the room
+            socket.join(roomId);
+            room.clients.add(socket.id);
+
+            // Emit a custom event to acknowledge successful room connection
+            socket.emit('moodsuervey-room-connected', roomId);
+
+            // Trigger the callback function if provided
+            if (callback && typeof callback === 'function') {
+                callback(moodsurveyRoomsData[roomId]);
             }
         });
 
@@ -56,7 +83,16 @@ const webSocketServer = (app, allowedOrigins) => {
             // Handle the vote details here
             // Forward the details to other clients in the same room
             socket.to(roomDetails.roomId).emit('board-update', roomDetails);
-            roomsData[roomDetails.roomId] = roomDetails;
+            retroRoomsData[roomDetails.roomId] = roomDetails;
+        });
+
+        socket.on('moodsurvey-update', (roomDetails) => {
+            console.log('moodsurvey-update', roomDetails.roomId);
+            console.log('\n newData' + JSON.stringify(roomDetails) + '\n');
+            // Handle the vote details here
+            // Forward the details to other clients in the same room
+            socket.to(roomDetails.roomId).emit('moodsurvey-update', roomDetails);
+            moodsurveyRoomsData[roomDetails.roomId] = roomDetails;
         });
 
 
