@@ -2,9 +2,13 @@ import React, { useState } from 'react'
 import { Paper, AvatarGroup, Box, Avatar, Tooltip, Button } from '@mui/material';
 import ShareIcon from '@mui/icons-material/Share';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import { GetAvatarFromName } from '../../../CommonComponents/RegisterUserDialog';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { useNavigate } from "react-router-dom";
 
 export default function RetroAppBar(props) {
     const [isCopied, setIsCopied] = useState(false);
+    const navigate = useNavigate();
 
     const handleShareButtonClick = () => {
         const fullPath = window.location.href;
@@ -23,18 +27,25 @@ export default function RetroAppBar(props) {
             });
     }
 
+    const handleHomeButtonClick = () => {
+        navigate(`/`, { state: { from: `/retroAppBar` } });
+    }
+
     return (
         <div>
             {
                 (props && props.participants) ?
                     <>
-                        <Paper elevation={1} sx={{ p: 1, mt: 1 }}>
+                        <Paper elevation={1} sx={{ p: 1, mt: 1, display: 'flex' }}>
+                            <Button variant="outlined" onClick={handleHomeButtonClick} endIcon={<ArrowBackIcon />}>
+                                Back to Home
+                            </Button>
                             {
                                 isCopied ?
-                                    <Button variant="outlined" onClick={handleShareButtonClick} endIcon={<CheckCircleIcon />}>
-                                        Copied! 
+                                    <Button variant="contained" color="secondary" sx={{marginLeft:'auto'}} onClick={handleShareButtonClick} endIcon={<CheckCircleIcon />}>
+                                        Copied!
                                     </Button> :
-                                    <Button variant="outlined" onClick={handleShareButtonClick} endIcon={<ShareIcon />}>
+                                    <Button variant="contained" color="secondary" sx={{marginLeft:'auto'}} onClick={handleShareButtonClick} endIcon={<ShareIcon />}>
                                         Share
                                     </Button>
                             }
@@ -45,8 +56,8 @@ export default function RetroAppBar(props) {
                                 {
                                     props.participants.map((participant, index) => {
                                         return (
-                                            <Tooltip title={participant.username} placement="left" >
-                                                <Avatar key={index} alt={participant.username} src={`https://source.boringavatars.com/beam/600/${participant.username}?&colors=0D8BD9,0FB2F2,41C0F2,77CFF2,BDE3F2`} />
+                                            <Tooltip key={index} title={participant.username} placement="left" >
+                                                <Avatar key={index} alt={participant.username} src={GetAvatarFromName(participant.username)} />
                                             </Tooltip>
                                         )
                                     })

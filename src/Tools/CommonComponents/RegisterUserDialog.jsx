@@ -5,13 +5,41 @@ import {
 } from "@mui/material";
 import { registerNewuser } from "../Services/UserRegistrationService";
 
-export default function RegisterUserDialog(props) {
+
+const colorPallets = [
+    ['#0D8BD9', '#0FB2F2', '#41C0F2', '#77CFF2', '#BDE3F2'],
+    ['#F24182', '#010440', '#0F7CBF', '#1FBF84', '#F2BA52'],
+    ['#261519', '#7D5EBF', '#907ABF', '#533CA6', '#593434'],
+    ['#05DBF2', '#05F258', '#F27405', '#F22E2E', '#F2F2F2'],
+    ['#7988D9', '#38A6A6', '#56BF7B', '#F2E7AE', '#F2561D'],
+    ['#368DD9', '#A2D4F2', '#F28705', '#F25C05', '#8C3503'],
+    ['#124673', '#307CBF', '#3BD98F', '#F2E205', '#F2EB8D'],
+]
+
+// get color pallette from string's length from colorPallets
+// in this format 0D8BD9,0FB2F2,41C0F2,77CFF2,BDE3F2
+const GetColorPalletteFromString = (inputString) => {
+    const colorPalletteIndex = inputString.length % (colorPallets.length);
+    // remove '#' from string and join them with ','
+    return colorPallets[colorPalletteIndex].map((code) => code.replace('#', '')).join(',');
+};
+
+const GetAvatarFromName = (userName) => {
+    let colorPallette = GetColorPalletteFromString('');
+    if (userName)
+        colorPallette = GetColorPalletteFromString(userName);
+    else
+        userName = ' ';
+    return `https://source.boringavatars.com/beam/600/${userName}?&colors=${colorPallette}`;
+};
+
+function RegisterUserDialog(props) {
     const [formData, setFormData] = useState({});
     const [avatar, setAvatar] = useState('');
     const [isFormValid, setIsFormValid] = useState(null);
 
     useEffect(() => {
-        setAvatar(`https://source.boringavatars.com/beam/600/${formData['userName']}?&colors=0D8BD9,0FB2F2,41C0F2,77CFF2,BDE3F2`);
+        setAvatar(GetAvatarFromName(formData['userName']));
     }, [formData]);
 
     const isFormDataValid = () => {
@@ -113,3 +141,5 @@ export default function RegisterUserDialog(props) {
         </>
     )
 }
+
+export { RegisterUserDialog, GetAvatarFromName };
