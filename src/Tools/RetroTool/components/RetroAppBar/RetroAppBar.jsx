@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Paper, AvatarGroup, Box, Avatar, Tooltip, Button } from '@mui/material';
-import ShareIcon from '@mui/icons-material/Share';
+import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { GetAvatarFromName } from '../../../CommonComponents/RegisterUserDialog';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -45,8 +45,8 @@ export default function RetroAppBar(props) {
                                     <Button variant="contained" color="secondary" sx={{marginLeft:'auto'}} onClick={handleShareButtonClick} endIcon={<CheckCircleIcon />}>
                                         Copied!
                                     </Button> :
-                                    <Button variant="contained" color="secondary" sx={{marginLeft:'auto'}} onClick={handleShareButtonClick} endIcon={<ShareIcon />}>
-                                        Share
+                                    <Button variant="contained" color="primary" sx={{marginLeft:'auto', textTransform:'capitalize'}} onClick={handleShareButtonClick} endIcon={<GroupAddIcon />}>
+                                        Copy Invite  
                                     </Button>
                             }
 

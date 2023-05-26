@@ -7,7 +7,6 @@ import BoardItem from './BoardItem';
 import NewBoardItem from './NewBoardItem';
 import { NewRetroBoardData } from './BoardsTestData';
 import { ConnectToRoomById, OpenSocket } from '../../Services/RetroBoardServices';
-import { GetUserDetails } from '../../Services/UserRegistrationService';
 import { GetRandomNumberFromPSTTime } from '../../Services/RandomNumber';
 import CallMadeIcon from '@mui/icons-material/CallMade';
 import RetroAppBar from './RetroAppBar/RetroAppBar';

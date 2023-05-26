@@ -57,7 +57,7 @@ export default function Home() {
                 <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                     {apps.filter(app => app.active).map((app, index) => {
                         return (
-                            <Grid item xs={4} key={index}>
+                            <Grid item xs={12} sm={6} md={4} key={index}>
                                 <Paper elevation={1}>
                                     <Card>
                                         <CardActionArea onClick={() => handleCTAClick(app.link)}>
