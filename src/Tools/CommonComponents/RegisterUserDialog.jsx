@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import {
     Button, Dialog, DialogActions, DialogContent, DialogContentText,
     DialogTitle, Grid, TextField, Avatar, Typography, Alert, Box
@@ -38,9 +38,9 @@ function RegisterUserDialog(props) {
     const [avatar, setAvatar] = useState('');
     const [isFormValid, setIsFormValid] = useState(null);
 
-    useEffect(() => {
-        setAvatar(GetAvatarFromName(formData['userName']));
-    }, [formData]);
+    // useEffect(() => {
+
+    // }, [formData]);
 
     const isFormDataValid = () => {
         // if (!formData.firstName || formData.firstName.trim().length === 0)
@@ -49,8 +49,8 @@ function RegisterUserDialog(props) {
         //     return false;
         if (!formData.userName || formData.userName.trim().length === 0)
             return false;
-        if (!formData.email || formData.email.trim().length === 0)
-            return false;
+        // if (!formData.email || formData.email.trim().length === 0)
+        //     return false;
         return true;
     };
 
@@ -59,8 +59,9 @@ function RegisterUserDialog(props) {
             setIsFormValid(false);
             return;
         }
-        registerNewuser(formData);
-        props.registrationCallback(formData);
+        const updatedFormData = { ...formData, 'avatar': avatar };
+        registerNewuser(updatedFormData);
+        props.registrationCallback(updatedFormData);
         props.handleClose();
         setIsFormValid(true);
     };
@@ -70,8 +71,9 @@ function RegisterUserDialog(props) {
         let inputValue = e.target.value;
 
         if (e.target.name === 'userName' && e.target.value.length > 0) {
-            // remove all spaces
+            // remove all spaces            
             inputValue = inputValue.replace(/\s/g, '').trim();
+            setAvatar(GetAvatarFromName(inputValue));
         }
 
         setFormData((previousObj) => {
@@ -88,14 +90,14 @@ function RegisterUserDialog(props) {
             <Dialog open={props.open} onClose={props.handleClose} fullWidth={true}>
                 <DialogTitle>
                     <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-                        <Box sx={{ flexGrow: 1 }}>Sign Up</Box>
+                        <Box sx={{ flexGrow: 1 }}>Your Nickname</Box>
                         <Avatar alt="Remy Sharp" sx={{ width: 90, height: 90, marginBottom: -20 }} src={avatar} />
                     </Box>
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText>
                         <Typography variant="p" gutterBottom>
-                            We just need your email, username that's it!
+                            So that your teammates can recognize you.
                         </Typography>
                         {
                             (isFormValid !== null && isFormValid === false) ?
@@ -104,12 +106,12 @@ function RegisterUserDialog(props) {
                     </DialogContentText>
                     <form onSubmit={handleSubmit}>
                         <Grid container spacing={2}>
-                            <Grid item xs={12}>
-                                <TextField autoFocus margin="dense" label="User Name" required
+                            <Grid item xs={12} sx={{ mt: 3 }}>
+                                <TextField autoFocus margin="dense" label="Your Nickname" required
                                     type="text" fullWidth variant="standard" name='userName' onChange={handleInputChange}
                                 />
                             </Grid>
-                            <Grid item xs={12}>
+                            {/* <Grid item xs={12}>
                                 <TextField autoFocus margin="dense"
                                     label="Email Address"
                                     type="email"
@@ -118,7 +120,7 @@ function RegisterUserDialog(props) {
                                     variant="standard"
                                     name='email' onChange={handleInputChange}
                                 />
-                            </Grid>
+                            </Grid> */}
                             {/* <Grid item xs={6}>
                                 <TextField autoFocus margin="dense" label="Firat Name" required
                                     type="text" fullWidth variant="standard" name='firstName' onChange={handleInputChange}
@@ -134,10 +136,10 @@ function RegisterUserDialog(props) {
                     </form>
                 </DialogContent>
                 <DialogActions sx={{ p: 2 }}>
-                    <Button onClick={props.handleClose}>Cancel</Button>
+                    {/* <Button onClick={props.handleClose}>Cancel</Button> */}
                     <Button onClick={handleSubmit} variant="contained">Get Started 🏁</Button>
                 </DialogActions>
-            </Dialog>
+            </Dialog >
         </>
     )
 }

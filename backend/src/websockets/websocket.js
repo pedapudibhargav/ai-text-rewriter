@@ -55,12 +55,10 @@ const webSocketServer = (app, allowedOrigins) => {
         socket.on('join-moodsuervey-room', (roomId, callback) => {
             console.log('join-moodsuervey-room', roomId);
             let room = rooms.get(roomId);
-            console.log('before \n' + JSON.stringify(rooms) + '\n');
             if (!room) {
                 // Create a new room if it doesn't exist
                 room = { id: roomId, clients: new Set() };
                 rooms.set(roomId, room);
-                console.log('\n after' + JSON.stringify(rooms) + '\n');
                 manageRoomsSize(moodsurveyRoomsData);
             }
 

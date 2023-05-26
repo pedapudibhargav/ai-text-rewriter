@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
-    Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, TextField, Button
+    Dialog, DialogContent, DialogActions, TextField, Button
 } from "@mui/material";
 
 export default function NewBoardItem(props) {
@@ -30,9 +30,9 @@ export default function NewBoardItem(props) {
                         onChange={(e) => handleContentChange(e)}
                     />
                 </DialogContent>
-                <DialogActions>
-                    <Button onClick={props.handleClose}>Cancel</Button>
-                    <Button onClick={handleSave}>Save</Button>
+                <DialogActions sx={{ p: 2 }}>
+                    <Button variant="outlined" size="medium" sx={{ px: 4, mr: 1 }} onClick={props.handleClose}>Cancel</Button>
+                    <Button variant="contained" size="medium" sx={{ px: 4 }} onClick={handleSave}>Save</Button>
                 </DialogActions>
             </Dialog>
         </>
