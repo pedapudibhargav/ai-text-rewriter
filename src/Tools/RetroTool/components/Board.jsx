@@ -10,6 +10,7 @@ import { ConnectToRoomById, OpenSocket } from '../../Services/RetroBoardServices
 import { GetRandomNumberFromPSTTime } from '../../Services/RandomNumber';
 import CallMadeIcon from '@mui/icons-material/CallMade';
 import RetroAppBar from './RetroAppBar/RetroAppBar';
+import DropContainer from './DropContainer';
 
 const newBoardItemDefault = {
     boardIndex: -1,
@@ -31,6 +32,7 @@ const boardStyles = {
 export default function Board(props) {
     const ROOM_ID = props.roomId;
     const [openDialog, setOpenDialog] = useState(false);
+    const [dragDropInstance, setDragDropInstance] = useState({'enable':false, 'boardIndex':-1, 'cardIndex':-1});
     const [dataToNewBoardItem, setDataToNewBoardItem] = useState(newBoardItemDefault);
     const [retroBoardData, setRetroBoardData] = useState({ ...NewRetroBoardData, roomId: ROOM_ID });
     const [socket, setSocket] = useState(OpenSocket());
@@ -130,19 +132,18 @@ export default function Board(props) {
 
     const deleteBoardItem = (boardIndex, cardIndex) => {
         const updatedBoardData = { ...retroBoardData };
-        updatedBoardData.boards[boardIndex]['cards'].splice(cardIndex, 1);
+        const removedCard = updatedBoardData.boards[boardIndex]['cards'].splice(cardIndex, 1);
         setRetroBoardData(updatedBoardData);
         socket.emit('board-update', updatedBoardData);
+        return removedCard;
     }
 
     const handleVoteUpdate = (boardIndex, cardIndex, vote) => {
         const username = props.currentUserDetails.userName;
-        // const updatedBoardData = { ...retroBoardData };
         const updatedBoardData = JSON.parse(JSON.stringify(retroBoardData));
         const board = { ...updatedBoardData.boards[boardIndex] };
         const card = { ...board.cards[cardIndex] };
         const existingVoteIndex = card.votes.findIndex((v) => v.voter === username);
-
         if (existingVoteIndex !== -1) {
             // User already voted, update the existing vote
             card.votes[existingVoteIndex].vote = vote;
@@ -151,7 +152,6 @@ export default function Board(props) {
             card.votes[card.votes.length] = { voter: username, vote: vote };
         }
         // Assign the updated card with votes back into BoardsTestData
-        // updatedBoardData.boards[boardIndex].cards[cardIndex] = card;
         setRetroBoardData(updatedBoardData);
         socket.emit('board-update', updatedBoardData);
     };
@@ -165,8 +165,22 @@ export default function Board(props) {
         return null;
     };
 
+    const handleDrag = (e, boardIndex, cardIndex) => {   
+        e.preventDefault();        
+        setDragDropInstance({...dragDropInstance, 'enable':true, 'boardIndex':boardIndex, 'cardIndex':cardIndex});
+    }
+
+    const handleOnDrop = (e,currentBoardIndex) => {
+        e.preventDefault();
+        setDragDropInstance({...dragDropInstance, 'enable':false});
+        const removedCard = deleteBoardItem(dragDropInstance.boardIndex, dragDropInstance.cardIndex);
+        removedCard.map((card) => {
+            retroBoardData.boards[currentBoardIndex]['cards'].unshift(card);
+        });
+        socket.emit('board-update', retroBoardData);
+    }
     socket.on('board-update', (updatedBoard) => {
-        setRetroBoardData(updatedBoard);
+        setDragDropInstance(updatedBoard);
     });
 
     return (
@@ -175,7 +189,7 @@ export default function Board(props) {
             <RetroAppBar participants={[retroBoardData.organizer, ...retroBoardData.participants]} />
             <Container maxWidth="false">
                 <Grid container spacing={2} sx={boardStyles}>
-                    {
+                    {                        
                         retroBoardData.boards.map((board, boardIndex) => {
                             return (
                                 <Grid key={boardIndex} item sx={{ borderRight: '1px dashed #afd2f3', pr: 2 }} xs={12 / retroBoardData.boards.length}>
@@ -185,6 +199,7 @@ export default function Board(props) {
                                             <AddIcon />
                                         </Fab>
                                     </Typography>
+                                    {dragDropInstance.enable && <DropContainer onDrop={event => handleOnDrop(event,boardIndex)}/>}
                                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
                                         {
                                             (board && board.cards && board.cards.length > 0) ?
@@ -194,6 +209,7 @@ export default function Board(props) {
                                                             <BoardItem key={cardIndex} card={card}
                                                                 handleVoteClick={(vote) => handleVoteUpdate(boardIndex, cardIndex, vote)}
                                                                 handleDelete={() => deleteBoardItem(boardIndex, cardIndex)}
+                                                                onDrag={(e) => handleDrag(e, boardIndex, cardIndex)}
                                                                 userVote={getUserVoteOnCard(card)}
                                                                 handleEdit={() => editBoardItem(boardIndex, cardIndex)} />
                                                         )

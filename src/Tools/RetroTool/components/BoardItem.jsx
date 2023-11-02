@@ -64,7 +64,7 @@ export default function BoardItem(props) {
     }
 
     return (
-        <>
+        <div draggable onDrag={(e)=> props.onDrag(e)}>
             <Card sx={{ minWidth: 275 }} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} >
                 <CardContent>
                     <Typography variant="body2">
@@ -108,6 +108,6 @@ export default function BoardItem(props) {
                     </Paper>
                 </CardActions>
             </Card>
-        </>
+        </div>
     )
 }

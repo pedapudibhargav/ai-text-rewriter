@@ -1,0 +1,13 @@
+.drop-container {
+    background-color: rgb(46, 133, 239, 0.1);
+    border-color: rgba(46, 133, 239,0.7);
+    border-width: 0.15rem;
+    border-radius: 1.5rem;
+    border-style: dashed;
+    text-align: center;
+    padding: 0.5rem;
+}
+.drop-container > p {
+    color: rgb(46, 133, 239, 1);
+    font-size: 1.2rem;
+}
