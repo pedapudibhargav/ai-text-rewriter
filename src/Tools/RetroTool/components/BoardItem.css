@@ -2,7 +2,9 @@
     display: flex;
     flex-direction: row;
 }
-
 .vote-menu li {
     font-size: 1.7rem;
+}
+.card-item:hover {
+    cursor: grab;
 }

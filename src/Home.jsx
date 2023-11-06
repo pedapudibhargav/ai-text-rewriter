@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
     Grid, Paper, Typography, Card, CardContent
     , CardActions, Button, CardMedia, CardActionArea, Container
@@ -8,10 +8,21 @@ import { GetRandomNumberFromPSTTime } from './Tools/Services/RandomNumber';
 import moodTrackerCardImage from './images/moodtracker_card.jpg';
 import retroToolCardImage from './images/retro_card.jpg';
 import teamsurveyToolCardImage from './images/teamsurvey.jpg';
+import { GetUserDetails } from './Tools/Services/UserRegistrationService';
 
 
 export default function Home() {
     const navigate = useNavigate();
+    useEffect(() => {
+        const userDetails = GetUserDetails();
+        if (!userDetails) {
+            navigate('/profile', { state: { from: `/` } });
+        }
+    }, []);
+
+    // if user details are not present, redirect to profile page
+
+
     // add :randomNum to replace it with random number.
     const apps = [
         {

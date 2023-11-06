@@ -1,0 +1,10 @@
+#app-dock {
+    position: fixed;
+    bottom: 10%;
+    left: 30%;
+    right: 30%;
+}
+
+#app-dock .paper-body {
+    padding: 2.2rem;
+}

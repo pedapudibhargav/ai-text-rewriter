@@ -64,9 +64,12 @@ export default function BoardItem(props) {
     }
 
     return (
-        <div draggable onDrag={(e)=> props.onDrag(e)}>
-            <Card sx={{ minWidth: 275 }} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} >
+        <div draggable onDrag={(e) => props.onDrag(e)}>
+            <Card sx={{ minWidth: 275 }} className="card-item" onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} >
                 <CardContent>
+                    <Typography variant="h6" className='card-title' gutterBottom>
+                        {boardItem.title}
+                    </Typography>
                     <Typography variant="body2">
                         {boardItem.content}
                     </Typography>

@@ -13,7 +13,14 @@ export default function NewBoardItem(props) {
         });
     };
 
-    const handleSave = () => {
+    const handleTitleChange = (e) => {
+        setCardData({
+            ...props.cardData,
+            title: e.target.value
+        })
+    }
+
+    const handleSave = () => {        
         props.handleSave(cardData);
     }
 
@@ -22,6 +29,15 @@ export default function NewBoardItem(props) {
             <Dialog open={props.open} onClose={props.handleClose} fullWidth>
                 <DialogContent>
                     <TextField
+                        required
+                        label="Ticket Title"
+                        fullWidth
+                        sx={{ mb: 2 }}
+                        defaultValue={props.cardData.title ? props.cardData.title : ''}
+                        onChange={(e) => handleTitleChange(e)}
+                    />
+                    <TextField
+                        required
                         label="Ticket Descriiption"
                         multiline
                         rows={6}

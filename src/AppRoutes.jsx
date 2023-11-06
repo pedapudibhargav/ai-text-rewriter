@@ -10,11 +10,11 @@ import ResponsiveAppBar from './Tools/CommonComponents/ResponsiveAppBar/Responsi
 import { RegisterUserDialog } from './Tools/CommonComponents/RegisterUserDialog';
 import { GetUserDetails } from './Tools/Services/UserRegistrationService';
 import Moodsurvey from './Tools/Moodsurvey/Moodsurvey';
+import UserProfile from './Tools/Views/UserProfile';
 
 export default function AppRoutes() {
     const [currentTheme, setCurrentTheme] = React.useState('light');
     const [currentUserDetails, setCurrentUserDetails] = React.useState(GetUserDetails());
-    const [enableDialog, setEnableDialog] = React.useState(!currentUserDetails);
     const darkTheme = createTheme({
         palette: {
             mode: currentTheme,
@@ -29,18 +29,18 @@ export default function AppRoutes() {
         <>
             <ThemeProvider theme={darkTheme}>
                 <CssBaseline />
-                <ResponsiveAppBar onThemeChange={toggleTheme} isCurrentThemeDark={currentTheme === 'dark'} currentUserDetails={currentUserDetails} />
-                <Container maxWidth="lg">
-                    <BrowserRouter>
+                <BrowserRouter>
+                    <ResponsiveAppBar onThemeChange={toggleTheme} isCurrentThemeDark={currentTheme === 'dark'} currentUserDetails={currentUserDetails} />
+                    <Container maxWidth="lg">
                         <Routes>
                             <Route path="/" element={<Home />} />
                             <Route path="/moodsurvey/:roomId" element={<Moodsurvey currentUserDetails={currentUserDetails} />}></Route>
                             <Route path="/retrotool/:roomId" element={<RetroTool currentUserDetails={currentUserDetails} />} />
                             <Route path="/teamsurvey" element={<TeamSurvey />} />
+                            <Route path="/profile" element={<UserProfile />} />
                         </Routes>
-                    </BrowserRouter>
-                </Container>
-                <RegisterUserDialog open={enableDialog} handleClose={() => setEnableDialog(false)} registrationCallback={setCurrentUserDetails} />
+                    </Container>
+                </BrowserRouter>
             </ThemeProvider>
         </>
     )
