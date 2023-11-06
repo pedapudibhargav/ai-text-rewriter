@@ -56,7 +56,7 @@ function UserProfile(props) {
         const updatedFormData = { ...formData, avatar };
         registerNewuser(updatedFormData);
         setIsFormValid(true);
-        navigate(-2);
+        navigate(-1);
     };
 
     // Get color from username
